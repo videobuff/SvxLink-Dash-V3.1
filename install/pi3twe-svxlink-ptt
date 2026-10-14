@@ -23,6 +23,23 @@ POWER, BASE, PTT, TX = 1, 2, 3, 4
 PTY_LINK = Path("/run/pi3twe-svxlink/ptt")
 STANDBY_FILE = Path("/var/lib/pi3twe-svxdash/svxlink-standby")
 LOCK_FILE = Path("/run/pi3twe-transmitter/route.lock")
+INTERFACE_PROFILE = Path("/etc/pi3twe/interface-profile")
+
+
+def revd_interface():
+    try:
+        value = INTERFACE_PROFILE.read_text().strip()
+    except FileNotFoundError:
+        return False
+    if value != "revd":
+        raise RuntimeError("Onbekend interfaceprofiel: " + value)
+    return True
+
+
+def hardware_enable(enabled):
+    # BASE drives J5.1/2 continuously in Rev D; the PCB handles COR/PTT itself.
+    if revd_interface():
+        relay(BASE, enabled)
 
 
 def relay(channel, enabled):
@@ -32,7 +49,7 @@ def relay(channel, enabled):
     )
 
 
-def receive():
+def receive(shutdown=False):
     try:
         relay(PTT, False)
     finally:
@@ -40,7 +57,8 @@ def receive():
         try:
             relay(TX, False)
         finally:
-            relay(BASE, False)
+            if shutdown or not revd_interface():
+                relay(BASE, False)
 
 
 def standby_on():
@@ -56,12 +74,14 @@ def standby_on():
 def transmit():
     if standby_on():
         return False
-    relay(BASE, True)
+    if not revd_interface():
+        relay(BASE, True)
     time.sleep(0.25)
     if standby_on():
         receive()
         return False
-    relay(TX, True)
+    if not revd_interface():
+        relay(TX, True)
     relay(PTT, True)
     return True
 
@@ -90,7 +110,9 @@ def radio_command(enabled):
 
 
 def runtime_config(config_file=Path("/etc/pi3twe/svxlink/svxlink.conf"),
-                   database_file=None, power_enabled=False):
+                   database_file=None, power_enabled=False, interface_revd=None):
+    if interface_revd is None:
+        interface_revd = revd_interface()
     config = configparser.ConfigParser(interpolation=None, strict=False)
     config.optionxform = str
     with config_file.open(encoding="utf-8") as source:
@@ -114,7 +136,7 @@ def runtime_config(config_file=Path("/etc/pi3twe/svxlink/svxlink.conf"),
                   "PI3TWE_SPOOL": "/var/lib/pi3twe-svxdash/svxlink-news",
                   "PI3TWE_STATUS": str(PTY_LINK.parent / "status"),
                   "PI3TWE_RADIO_ENABLED": str(int(power_enabled and not standby_on())),
-                  "IDENT_ONLY_AFTER_TX": "0", "NO_REPEAT": "0",
+                  "IDENT_ONLY_AFTER_TX": "0", "NO_REPEAT": "1" if interface_revd else "0",
                   "MUTE_RX_ON_TX": "0", "MUTE_TX_ON_RX": "0",
                   "OPEN_ON_SQL": "100", "OPEN_SQL_FLANK": "OPEN", "IDLE_TIMEOUT": "1",
                   "SHORT_VOICE_ID_ENABLE": "0", "LONG_VOICE_ID_ENABLE": "0"})
@@ -139,11 +161,12 @@ def main():
         signal.signal(signal.SIGTERM, stop)
         signal.signal(signal.SIGINT, stop)
         try:
-            receive()
+            receive(shutdown=True)
             PTY_LINK.unlink(missing_ok=True)
             (PTY_LINK.parent / "status").mkdir(mode=0o750, exist_ok=True)
             (PTY_LINK.parent / "status/ready").unlink(missing_ok=True)
             (PTY_LINK.parent / "status/call-test-ready").unlink(missing_ok=True)
+            (PTY_LINK.parent / "status/metar-test-ready").unlink(missing_ok=True)
             (PTY_LINK.parent / "applied-config").unlink(missing_ok=True)
             config_path = runtime_config(power_enabled=power_on())
             child = subprocess.Popen([
@@ -186,7 +209,13 @@ def main():
                 if transmit_allowed != enabled:
                     if last_radio_token:
                         (PTY_LINK.parent / "status" / f"{last_radio_token}.json").unlink(missing_ok=True)
+                    # Disable PCB COR/PTT before notifying the engine.
+                    # Enable only after its command was accepted for delivery.
+                    if not transmit_allowed:
+                        hardware_enable(False)
                     last_radio_token = radio_command(transmit_allowed)
+                    if transmit_allowed:
+                        hardware_enable(True)
                     enabled = transmit_allowed
                 if not transmit_allowed:
                     requested = False
@@ -217,7 +246,7 @@ def main():
                     child.kill()
                     child.wait()
             try:
-                receive()
+                receive(shutdown=True)
             finally:
                 if port is not None:
                     os.close(port)

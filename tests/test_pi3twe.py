@@ -26,7 +26,7 @@ class Pi3tweConfigurationTests(unittest.TestCase):
             original.mkdir()
             config = original / 'svxlink.conf'
             scope = {'Path': Path, 'configparser': configparser,
-                     'PTY_LINK': root / 'ptt', 'standby_on': lambda: False}
+                     'PTY_LINK': root / 'ptt', 'standby_on': lambda: False, 'revd_interface': lambda: False}
             exec(compile(ast.Module(body=[fn], type_ignores=[]), 'runtime_config', 'exec'), scope)
             for path, expected in [('svxlink.d', str(original / 'svxlink.d')),
                                    ('/etc/custom/modules', '/etc/custom/modules')]:
