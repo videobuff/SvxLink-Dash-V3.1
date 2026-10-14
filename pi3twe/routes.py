@@ -73,6 +73,12 @@ def mode(mode):
     return jsonify(ok=True, **result)
 
 
+@bp.post('/api/test/call')
+def test_call():
+    runtime().test_call()
+    return jsonify(ok=True, started=True), 202
+
+
 @bp.put('/api/logic')
 def logic():
     return jsonify(ok=True, settings=runtime().update_settings(request.get_json(silent=True)))

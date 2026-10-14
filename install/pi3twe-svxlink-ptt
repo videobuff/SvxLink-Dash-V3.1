@@ -143,6 +143,7 @@ def main():
             PTY_LINK.unlink(missing_ok=True)
             (PTY_LINK.parent / "status").mkdir(mode=0o750, exist_ok=True)
             (PTY_LINK.parent / "status/ready").unlink(missing_ok=True)
+            (PTY_LINK.parent / "status/call-test-ready").unlink(missing_ok=True)
             (PTY_LINK.parent / "applied-config").unlink(missing_ok=True)
             config_path = runtime_config(power_enabled=power_on())
             child = subprocess.Popen([

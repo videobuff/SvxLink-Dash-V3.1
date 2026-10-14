@@ -40,6 +40,18 @@
         </section>
     </div>
     <section class="status-box status-box-soft">
+        <h2>Repeater testen</h2>
+        <p>De tests worden via de repeateruitgang uitgezonden. De calltest gebruikt de ingestelde RPTR-callgever. Kies voor de nieuwstest een ingelezen bulletin; de uurplanning en geldigheidsperiode blijven ongewijzigd.</p>
+        <div class="pi3twe-actions">
+            <button type="button" id="test-call" data-api="test/call" data-success="Test call RPTR gestart">Test call RPTR</button>
+        </div>
+        <form id="news-test-form" class="pi3twe-form">
+            <label>Bulletin voor de test <select id="news-test-select" name="bulletin_id" required><option value="">Lees eerst een bulletin in</option></select></label>
+            <button type="submit" id="test-news">Test nieuws</button>
+        </form>
+        <p class="pi3twe-muted">Power en SvxLink moeten AAN staan. Voor de nieuwstest moeten nieuwsuitzendingen toegestaan zijn. Tijdens een test blijven Power uit en STANDBY beschikbaar.</p>
+    </section>
+    <section class="status-box status-box-soft">
         <h2>Nieuwsbulletins <span id="news-state" class="pi3twe-badge">Laden…</span></h2>
         <p>Upload een bulletin en stel de geldigheid in. Actieve bulletins worden ieder heel uur uitgezonden binnen die periode, wanneer Power en SvxLink AAN staan en nieuwsuitzendingen zijn toegestaan. Tijden zijn Nederlands.</p>
         <p id="current-news" class="pi3twe-muted"></p>

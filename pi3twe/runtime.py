@@ -140,6 +140,36 @@ class Runtime:
             Thread(target=run, name='pi3twe-manual-news', daemon=True).start()
             return item
 
+    def test_call(self):
+        with self._edit_lock:
+            state = self.mode.state()
+            if not self.controller.relays.physical_states()[1]:
+                raise ValueError('Repeater Power staat uit')
+            if state['mode'] != 'aan' or not state['engine'].get('native_ready'):
+                raise ValueError('Zet SvxLink eerst op AAN')
+            if not state['engine'].get('call_test_available'):
+                raise ValueError('Installeer eerst de uitbreiding voor Test call RPTR')
+            if self.player.busy or not self._play_lock.acquire(blocking=False):
+                raise ValueError('Er is al een uitzending actief')
+            self._pending = 'Callgever RPTR'
+            def run():
+                try:
+                    with self.logic.change():
+                        self.logic.phase = 'call'
+                        self.engine.test_repeater_call()
+                except Exception as error:
+                    self.logic.last_error = str(error)
+                    self.events.add('test', 'CALL RPTR TEST MISLUKT: ' + str(error))
+                else:
+                    self.logic.last_error = None
+                    self.events.add('test', 'CALL RPTR TEST AFGEROND')
+                finally:
+                    self.logic.phase = 'normal'
+                    self._pending = None
+                    self._play_lock.release()
+            Thread(target=run, name='pi3twe-repeater-call-test', daemon=True).start()
+            self.events.add('test', 'CALL RPTR TEST GESTART')
+
     def delete(self, bulletin_id):
         with self._edit_lock:
             item = self.news.get(bulletin_id)

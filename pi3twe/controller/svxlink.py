@@ -51,6 +51,7 @@ class SvxLink:
             "echolink_configured": self._echolink_configured(),
             "active": service.get("ActiveState") == "active",
             "native_ready": self.command_pty.exists() and (self.status_directory / "ready").is_file(),
+            "call_test_available": (self.status_directory / "call-test-ready").is_file(),
             "enabled": service.get("UnitFileState") == "enabled",
             "service_state": service.get("ActiveState", "unknown"),
             "service_detail": service.get("SubState", "unknown"),
@@ -82,7 +83,7 @@ class SvxLink:
         return self.state()
 
     def send_command(self, command: str, token: str, arguments: str = "") -> None:
-        if command not in {"NEWS", "CANCEL", "RADIO", "POLICY", "STATUS"} or not re.fullmatch(r"[a-f0-9]{32}", token):
+        if command not in {"NEWS", "CALL", "CANCEL", "RADIO", "POLICY", "STATUS"} or not re.fullmatch(r"[a-f0-9]{32}", token):
             raise ValueError("Ongeldige SvxLink-opdracht")
         if not re.fullmatch(r"[A-Z0-9/ ]*", arguments):
             raise ValueError("Ongeldige SvxLink-argumenten")
@@ -135,6 +136,37 @@ class SvxLink:
                 raise SvxLinkError("SvxLink heeft de opdracht geweigerd: " + state["phase"])
             time.sleep(.05)
         raise SvxLinkError("SvxLink heeft de opdracht niet bevestigd")
+
+    def test_repeater_call(self):
+        token = uuid.uuid4().hex
+        queued = False
+        finished = False
+        try:
+            self.send_command("CALL", token)
+            queued = True
+            deadline = time.monotonic() + 40
+            while time.monotonic() < deadline:
+                state = self.command_status(token)
+                if state:
+                    phase = state["phase"]
+                    if phase == "done":
+                        finished = True
+                        return
+                    if phase in {"error", "busy", "power_off", "cancelled"}:
+                        finished = True
+                        raise SvxLinkError("Calltest: " + {
+                            "error": "callgever kon niet worden afgespeeld", "busy": "audio is bezig",
+                            "power_off": "Power staat uit", "cancelled": "test is afgebroken"
+                        }[phase])
+                time.sleep(.1)
+            raise SvxLinkError("Calltest is niet tijdig afgerond")
+        finally:
+            if queued and not finished:
+                try:
+                    self.send_command("CANCEL", token)
+                except SvxLinkError:
+                    pass
+            self.cleanup_status(token)
 
     def apply_policy(self, settings):
         self._execute("POLICY", f"{settings['callsign']} {settings['id_interval_minutes']}")

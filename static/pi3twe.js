@@ -45,6 +45,9 @@ async function refresh() {
             const sql = document.querySelector('#rf-form [name="squelch_level"]'); sql.min = state.rf.squelch_level_min; sql.max = state.rf.squelch_level_max;
             formsLoaded = true;
         }
+        const radioReady = power && state.mode.mode === 'aan' && state.mode.engine.native_ready;
+        document.getElementById('test-call').disabled = state.news_busy || !radioReady || !state.mode.engine.call_test_available;
+        document.getElementById('test-news').disabled = state.news_busy || !radioReady || !state.logic.settings.news_enabled || !document.getElementById('news-test-select').value;
         for (const button of document.querySelectorAll('.news-play')) button.disabled = state.news_busy || !power || state.mode.mode !== 'aan' || !state.logic.settings.news_enabled;
     } catch (error) { notify(error.message, true); }
 }
@@ -52,11 +55,28 @@ async function action(button, path, method, data, success, reloadNews = false) {
     if (button) button.disabled = true;
     try { await api(path, method, data); notify(success); if (reloadNews) await loadNews(); await refresh(); return true; }
     catch (error) { notify(error.message, true); return false; }
-    finally { if (button) button.disabled = false; }
+    finally { if (button) button.disabled = false; if (latestState) updateTestButtons(); }
 }
 for (const button of document.querySelectorAll('[data-api]')) button.addEventListener('click', () => action(button, button.dataset.api, 'POST', undefined, button.dataset.success));
+function updateTestButtons() {
+    if (!latestState) return;
+    const ready = latestState.radio.repeater_on && latestState.mode.mode === 'aan' && latestState.mode.engine.native_ready;
+    document.getElementById('test-call').disabled = latestState.news_busy || !ready || !latestState.mode.engine.call_test_available;
+    document.getElementById('test-news').disabled = latestState.news_busy || !ready || !latestState.logic.settings.news_enabled || !document.getElementById('news-test-select').value;
+    for (const button of document.querySelectorAll('.news-play')) button.disabled = latestState.news_busy || !ready || !latestState.logic.settings.news_enabled;
+}
+const newsTest = document.getElementById('news-test-form');
+newsTest.addEventListener('submit', event => { event.preventDefault(); const id = document.getElementById('news-test-select').value; if (id) action(document.getElementById('test-news'), `news/${id}/play`, 'POST', undefined, 'Test nieuws gestart'); });
+document.getElementById('news-test-select').addEventListener('change', updateTestButtons);
 async function loadNews() {
-    const body = await api('news'); const list = document.getElementById('news-list'); list.replaceChildren();
+    const body = await api('news');
+    const select = document.getElementById('news-test-select'); const selected = select.value;
+    select.replaceChildren();
+    if (!body.items.length) { const option = document.createElement('option'); option.value = ''; option.textContent = 'Lees eerst een bulletin in'; select.append(option); }
+    for (const item of body.items) { const option = document.createElement('option'); option.value = String(item.id); option.textContent = `${item.label} — ${item.original_filename}`; select.append(option); }
+    if (body.items.some(item => String(item.id) === selected)) select.value = selected;
+    updateTestButtons();
+    const list = document.getElementById('news-list'); list.replaceChildren();
     if (!body.items.length) { const p = document.createElement('p'); p.textContent = 'Nog geen bulletins ingelezen.'; list.append(p); }
     for (const item of body.items) {
         const article = document.getElementById('news-template').content.firstElementChild.cloneNode(true);

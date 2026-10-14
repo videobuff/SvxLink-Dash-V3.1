@@ -156,3 +156,42 @@ class ControlsTest(TestCase):
         text = prometheus_metrics(self.rt.controller.state())
         self.assertIn('pi3twe_relay_on{relay="1",name="Repeater POWER"}', text)
         self.assertIn('pi3twe_nuc_uptime_seconds', text)
+
+    def test_call_requires_power_normal_mode_and_native_capability(self):
+        response = self.request('test/call')
+        self.assertEqual(response.status_code, 400)
+        self.rt.controller.set_relay(1, True)
+        response = self.request('test/call')
+        self.assertEqual(response.status_code, 400)
+        self.engine.test_repeater_call.assert_not_called()
+
+    def test_call_does_not_depend_on_news_permission_or_touch_echolink(self):
+        from threading import Event
+        entered = Event()
+        release = Event()
+        finished = Event()
+        self.rt.controller.set_relay(1, True)
+        self.engine.state.return_value = {'active': True, 'native_ready': True, 'call_test_available': True}
+        def play_call():
+            entered.set()
+            release.wait(2)
+            finished.set()
+        self.engine.test_repeater_call.side_effect = play_call
+        try:
+            response = self.request('test/call')
+            self.assertEqual(response.status_code, 202)
+            self.assertTrue(entered.wait(1))
+            self.assertTrue(self.rt.busy)
+            self.assertFalse(self.rt.player.transmit_enabled)
+            self.assertEqual(self.request('test/call').status_code, 400)
+            self.engine.control.assert_not_called()
+            self.engine.test_repeater_call.assert_called_once()
+        finally:
+            release.set()
+            self.assertTrue(finished.wait(1))
+            self.rt._play_lock.acquire(timeout=1)
+            self.rt._play_lock.release()
+
+    def test_call_endpoint_rejects_missing_csrf(self):
+        self.assertEqual(self.client.post('/pi3twe/api/test/call').status_code, 403)
+        self.engine.test_repeater_call.assert_not_called()

@@ -88,3 +88,41 @@ systemd-analyze verify install/svxlink-dash.service install/pi3twe-svxlink.servi
 Tests use dummy relays and engine commands, covering Power persistence, immediate
 off, no direct TX, standby, authentication, news uploads/cleanup, scheduling,
 playback lifecycle, policy rollback and analogue feedback prevention.
+
+## Repeater test buttons
+
+The PI3TWE page has **Test call RPTR** and **Test nieuws**. The call button uses
+the configured short repeater identification (CW in the current setup), queued
+through the local TX message mixer. It does not request an EchoLink identification,
+restart a module, or send announcement audio into the RX-to-module path.
+Power and normal SvxLink operation are required. Call testing is independent of
+the news permission. The news button broadcasts the selected uploaded bulletin
+once, including the configured beeps, without changing its schedule or validity.
+
+The native `CALL` command shares the exclusive announcement lane with news. It
+rejects concurrent tests and disabled radio operation, supports cancellation on
+Power off/standby, and completes after the engine flushes the identification.
+Its watchdog bounds a call test to 30 seconds. The UI only enables the call button
+when the running native plugin advertises support.
+
+For the existing installation, build and install the updated plugin with:
+
+```sh
+python3 scripts/build-pi3twe-logic.py \
+  --source /home/erik/svxlink-26.05.2-stage \
+  --headers /home/erik/svxlink-26.05.2-stage-deps \
+  --build-config /home/erik/svxlink-26.05.2-stage-build/build
+python3 scripts/check-native-tests.py
+sudo python3 install/update-pi3twe-test-buttons.py
+```
+
+The build pins SvxLink 26.05.2, the 16 kHz internal audio format and the installed
+binary/core ABI hashes. The checker runs a separate engine with **Dummy RX and
+Dummy TX**, exercising call rejection, concurrent-call rejection, cancellation,
+completion and a subsequent news announcement without touching real relays.
+The update backs up the native plugin/event wrapper and uses the normal dashboard
+migration/rollback procedure. It does not start a real test broadcast.
+
+The engine check also covers the SvxLink 26 event namespace: announcement filenames
+are stored in the logic's `Pi3twe` namespace, where native `setEventVariable` writes
+them. This prevents the previous news handler from reading an unset global variable.
