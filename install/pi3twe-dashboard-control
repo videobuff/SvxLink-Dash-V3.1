@@ -2,7 +2,8 @@
 set -eu
 case "${1:-}" in
   restart-all) /usr/bin/systemctl restart pi3twe-svxlink.service svxlink-dash.service ;;
+  restart-rf) /usr/bin/systemctl restart pi3twe-rf-monitor.service ;;
   reboot) /usr/bin/systemctl reboot ;;
   shutdown) /usr/bin/systemctl poweroff ;;
-  *) echo "Gebruik: pi3twe-dashboard-control {restart-all|reboot|shutdown}" >&2; exit 2 ;;
+  *) echo "Gebruik: pi3twe-dashboard-control {restart-all|restart-rf|reboot|shutdown}" >&2; exit 2 ;;
 esac

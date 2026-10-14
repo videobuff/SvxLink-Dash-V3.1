@@ -1,14 +1,21 @@
 [Unit]
 Description=SvxLink-Dash-V3.1 Web Configuration Dashboard
-After=network.target svxlink.service
+After=network.target pi3twe-svxlink.service
 Wants=network.target
 
 [Service]
 Type=simple
 User=svxlink
-Group=svxlink
-SupplementaryGroups=audio
+Group=audio
+SupplementaryGroups=plugdev dialout
 WorkingDirectory=/opt/dashboard
+Environment=PI3TWE_CONTROL_ENABLED=1
+Environment=PI3TWE_STATE_DIRECTORY=/var/lib/pi3twe-svxdash
+Environment=PI3TWE_HARDWARE_BACKEND=usbrelay
+Environment=PI3TWE_USB_RELAY_ID=QAAMZ
+Environment=PI3TWE_TX_RELAY_CHANNEL=4
+Environment=PI3TWE_SENSOR_BACKEND=dummy
+UMask=0007
 ExecStart=/usr/bin/python3 /opt/dashboard/app.py
 Restart=on-failure
 RestartSec=5

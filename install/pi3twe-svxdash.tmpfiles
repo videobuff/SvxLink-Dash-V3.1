@@ -1,0 +1,2 @@
+d /run/pi3twe-transmitter 0770 svxlink audio -
+f /run/pi3twe-transmitter/route.lock 0660 svxlink audio -

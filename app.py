@@ -238,6 +238,8 @@ def require_dashboard_auth():
     """
 
     public_paths = {
+        "/metrics",
+        "/",
         "/status",
         "/api/status",
         "/wifi",
@@ -447,7 +449,7 @@ def svxlink_status():
 
 @app.route("/", methods=["GET"])
 def index():
-    return redirect(url_for("start"))
+    return redirect(url_for("status_page"))
 
 
 @app.route("/start", methods=["GET", "POST"])
@@ -4041,11 +4043,14 @@ def dtmf_page():
 
     return redirect(url_for("status_page"))
     
+from pi3twe.routes import register as register_pi3twe
+register_pi3twe(app)
+
 if __name__ == "__main__":
     ensure_dirs()
 
     app.run(
         host="0.0.0.0",
-        port=5001,
+        port=5000,
         debug=False,
     )

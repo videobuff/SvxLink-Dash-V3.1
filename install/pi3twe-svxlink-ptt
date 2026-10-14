@@ -21,7 +21,7 @@ source_root = Path(__file__).resolve().parents[1]
 RELAY_ID = "QAAMZ"
 POWER, BASE, PTT, TX = 1, 2, 3, 4
 PTY_LINK = Path("/run/pi3twe-svxlink/ptt")
-STANDBY_FILE = Path("/opt/pi3twe/pi3twe-controller/database/svxlink-standby")
+STANDBY_FILE = Path("/var/lib/pi3twe-svxdash/svxlink-standby")
 LOCK_FILE = Path("/run/pi3twe-transmitter/route.lock")
 
 
@@ -111,7 +111,7 @@ def runtime_config(config_file=Path("/etc/pi3twe/svxlink/svxlink.conf"),
     logic.update({"TYPE": "Pi3twe",
                   "EVENT_HANDLER": "/usr/local/share/pi3twe-svxlink/events.tcl",
                   "COMMAND_PTY": str(PTY_LINK.parent / "command"),
-                  "PI3TWE_SPOOL": "/opt/pi3twe/pi3twe-controller/database/svxlink-news",
+                  "PI3TWE_SPOOL": "/var/lib/pi3twe-svxdash/svxlink-news",
                   "PI3TWE_STATUS": str(PTY_LINK.parent / "status"),
                   "PI3TWE_RADIO_ENABLED": str(int(power_enabled and not standby_on())),
                   "IDENT_ONLY_AFTER_TX": "0", "NO_REPEAT": "0",

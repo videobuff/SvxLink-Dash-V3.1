@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="pi3twe-csrf" content="{{ csrf_token }}">
+    <title>PI3TWE — SvxDash</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='site.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='pi3twe.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='svxlink.ico') }}">
+    <script src="{{ url_for('static', filename='pi3twe.js') }}" defer></script>
+</head>
+<body>
+<main class="page"><section class="card dashboard-container pi3twe-page">
+    <div class="dashboard-header">
+        <h1 class="status-title"><img class="status-title-icon" src="{{ url_for('static', filename='svxlink.ico') }}" alt=""> PI3TWE bediening</h1>
+        <p>Repeater, nieuwsbulletins en audio</p>
+    </div>
+    {% include 'navbar.html' %}
+    <div id="operation-message" role="status" aria-live="polite"></div>
+    <div class="pi3twe-grid">
+        <section class="status-box status-box-soft">
+            <h2>Repeater Power <span id="power-state" class="pi3twe-badge">Laden…</span></h2>
+            <p>Voeding van de Icom. Power uit blijft beschikbaar tijdens een uitzending.</p>
+            <div class="pi3twe-actions">
+                <button type="button" data-api="power/on" data-success="Repeater Power aangezet">Power aan</button>
+                <button type="button" class="pi3twe-danger" data-api="power/off" data-success="Repeater Power uitgezet">Power uit</button>
+            </div>
+            <p id="relay-health" class="pi3twe-muted"></p>
+        </section>
+        <section class="status-box status-box-soft">
+            <h2>SvxLink <span id="mode-state" class="pi3twe-badge">Laden…</span></h2>
+            <p>AAN: normale werking. STANDBY: geen radio-uitzending, EchoLink blijft aangemeld. UIT: SvxLink stopt.</p>
+            <div class="pi3twe-actions">
+                <button type="button" data-api="mode/aan" data-success="SvxLink op AAN gezet">AAN</button>
+                <button type="button" data-api="mode/standby" data-success="SvxLink op STANDBY gezet">STANDBY</button>
+                <button type="button" class="pi3twe-danger" data-api="mode/uit" data-success="SvxLink uitgezet">UIT</button>
+            </div>
+            <p id="engine-state" class="pi3twe-muted"></p>
+        </section>
+    </div>
+    <section class="status-box status-box-soft">
+        <h2>Nieuwsbulletins <span id="news-state" class="pi3twe-badge">Laden…</span></h2>
+        <p>Upload een bulletin en stel de geldigheid in. Actieve bulletins worden ieder heel uur uitgezonden binnen die periode, wanneer Power en SvxLink AAN staan en nieuwsuitzendingen zijn toegestaan. Tijden zijn Nederlands.</p>
+        <p id="current-news" class="pi3twe-muted"></p>
+        <form id="news-upload" class="pi3twe-form">
+            <label>Audiobestand <input type="file" name="audio" accept=".mp3,.wav,.ogg,.flac,.m4a" required><small>MP3, WAV, OGG, FLAC of M4A; maximaal 100 MB en 30 minuten.</small></label>
+            <label>Geldig vanaf <input type="datetime-local" name="valid_from" required></label>
+            <label>Geldig tot <input type="datetime-local" name="valid_until" required></label>
+            <button type="submit">Bulletin inlezen</button>
+        </form>
+        <div id="news-list" class="pi3twe-news-list"></div>
+    </section>
+    <section class="status-box status-box-soft">
+        <h2>Nieuws en callgever</h2>
+        <form id="logic-form" class="pi3twe-form">
+            <label class="pi3twe-check"><input type="checkbox" name="news_enabled"> Nieuwsuitzendingen toegestaan</label>
+            <label>Roepletter <input name="callsign" required maxlength="19"></label>
+            <label>Identificatie iedere (minuten) <input type="number" name="id_interval_minutes" min="1" max="60" required></label>
+            <label>Aantal piepen <input type="number" name="beep_count" min="1" max="10" required></label>
+            <label>Pieptoon (Hz) <input type="number" name="beep_frequency_hz" min="300" max="2500" required></label>
+            <label>Duur per piep (ms) <input type="number" name="beep_duration_ms" min="50" max="1000" required></label>
+            <label>Pauze tussen piepen (ms) <input type="number" name="beep_gap_ms" min="50" max="1000" required></label>
+            <button type="submit">Instellingen opslaan</button>
+        </form>
+    </section>
+    <details class="status-box status-box-soft">
+        <summary>Audio en publieke stream</summary>
+        <p>Deze regelaars bedienen de analoge NUC-audio. De overige SvxLink-audioniveaus staan onder Sound Levels.</p>
+        <p id="audio-info" class="pi3twe-muted"></p>
+        <form id="audio-form" class="pi3twe-form">
+            <label>Ontvangstingang (%) <input type="number" name="input_percent" min="0" max="100" required></label>
+            <label>Analoge monitor (%) <input type="number" name="monitor_percent" min="0" max="100" required></label>
+            <label>Zend-/speakeruitgang (%) <input type="number" name="master_percent" min="0" max="100" required></label>
+            <label class="pi3twe-check"><input type="checkbox" name="enabled"> Analoge loopback (alleen als SvxLink UIT staat)</label>
+            <button type="submit">Audio opslaan</button>
+        </form>
+        <form id="stream-form" class="pi3twe-form">
+            <label>Publieke streambron <select name="stream_source"><option value="sdr">OpenWebRX / SDR</option><option value="analog">Analoge microfooningang</option></select></label>
+            <button type="submit">Streambron opslaan</button>
+        </form>
+    </details>
+    <details class="status-box status-box-soft">
+        <summary>SDR / RF-monitor</summary>
+        <p id="rf-info" class="pi3twe-muted"></p>
+        <form id="rf-form" class="pi3twe-form">
+            <label>Frequentie <select name="base_frequency_hz"><option value="145600000">145,600 MHz — uitgang</option><option value="145000000">145,000 MHz — ingang</option><option value="430275000">430,275 MHz — test</option></select></label>
+            <label>Fijnafstemming (kHz) <input type="number" name="offset_khz" min="-10" max="10" step="1" required></label>
+            <label id="rf-squelch-label">Squelch <input type="number" name="squelch_level" required></label>
+            <label>Streamniveau (%) <input type="number" name="stream_level_percent" min="10" max="100" step="5" required></label>
+            <button type="submit">RF-monitor opslaan</button>
+        </form>
+    </details>
+    <section class="status-box status-box-soft">
+        <h2>Gebeurtenissen</h2>
+        <p id="system-state" class="pi3twe-muted"></p>
+        <ul id="event-list" class="pi3twe-events"></ul>
+    </section>
+    <footer class="site-footer">SvxLink-Dash-V3.1 · PI3TWE-uitbreiding · SvxLink {{ version_info.engine }}</footer>
+</section></main>
+<template id="news-template">
+    <article class="pi3twe-bulletin">
+        <h3></h3><p class="news-file pi3twe-muted"></p>
+        <audio controls preload="none"></audio>
+        <form class="pi3twe-form">
+            <label>Vanaf <input type="datetime-local" name="valid_from" required></label>
+            <label>Tot <input type="datetime-local" name="valid_until" required></label>
+            <label class="pi3twe-check"><input type="checkbox" name="enabled"> Actief in uurplanning</label>
+            <button type="submit">Opslaan</button>
+        </form>
+        <p class="news-period pi3twe-muted"></p>
+        <div class="pi3twe-actions"><button type="button" class="news-play">Nu uitzenden</button><button type="button" class="news-delete pi3twe-danger">Verwijderen</button></div>
+    </article>
+</template>
+</body></html>

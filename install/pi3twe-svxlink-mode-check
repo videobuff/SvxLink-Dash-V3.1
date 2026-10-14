@@ -13,4 +13,4 @@ def should_start(path):
 
 
 if __name__ == '__main__':
-    raise SystemExit(0 if should_start(Path('/opt/pi3twe/pi3twe-controller/database/svxlink-standby')) else 1)
+    raise SystemExit(0 if should_start(Path('/var/lib/pi3twe-svxdash/svxlink-standby')) else 1)

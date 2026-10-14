@@ -8,3 +8,7 @@ config/talkgroups.json
 config/wifi.json
 *.log
 .native-build/
+
+*.sqlite3
+*.sqlite3-*
+dashboard-secret

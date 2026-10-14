@@ -1,0 +1,27 @@
+.pi3twe-page h2 { font-size: 1.25rem; margin: 0 0 12px; }
+.pi3twe-page h3 { margin: 0 0 6px; }
+.pi3twe-page .status-box { padding: 22px; margin: 20px 0; }
+.pi3twe-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.pi3twe-grid .status-box { margin-bottom: 0; }
+.pi3twe-badge { display: inline-block; padding: 3px 9px; border-radius: 5px; background: #e6eaf0; color: #334155; font-size: .85rem; margin-left: 8px; }
+.pi3twe-badge.on { background: #dcfce7; color: #166534; }
+.pi3twe-badge.off { background: #fee2e2; color: #991b1b; }
+.pi3twe-muted, .pi3twe-form small { color: #64748b; font-size: .9rem; }
+.pi3twe-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
+.pi3twe-page button { background: #2563eb; color: white; border: 0; border-radius: 5px; padding: 10px 16px; font: inherit; cursor: pointer; }
+.pi3twe-page button:hover { background: #1d4ed8; }
+.pi3twe-page button:disabled { opacity: .55; cursor: wait; }
+.pi3twe-page button.pi3twe-danger { background: #b91c1c; }
+.pi3twe-form { display: flex; flex-wrap: wrap; align-items: end; gap: 16px; margin: 18px 0; }
+.pi3twe-form label { display: flex; flex-direction: column; gap: 6px; min-width: 160px; flex: 1; }
+.pi3twe-form input, .pi3twe-form select { padding: 9px; border: 1px solid #cbd5e1; border-radius: 4px; background: white; color: #0f172a; font: inherit; width: 100%; box-sizing: border-box; }
+.pi3twe-form .pi3twe-check { flex-direction: row; align-items: center; min-height: 40px; }
+.pi3twe-check input { width: auto; }
+.pi3twe-bulletin { border-top: 1px solid #cbd5e1; padding-top: 20px; margin-top: 20px; }
+.pi3twe-bulletin audio { max-width: 100%; }
+.pi3twe-page summary { font-weight: bold; cursor: pointer; }
+.pi3twe-events { list-style: none; padding: 0; max-height: 380px; overflow: auto; }
+.pi3twe-events li { padding: 8px 0; border-bottom: 1px solid #e2e8f0; font-size: .9rem; }
+#operation-message:not(:empty) { padding: 14px; margin-top: 20px; background: #dcfce7; color: #166534; border-radius: 5px; }
+#operation-message.error:not(:empty) { background: #fee2e2; color: #991b1b; }
+@media (max-width: 700px) { .pi3twe-grid { grid-template-columns: 1fr; gap: 0; } .pi3twe-form { flex-direction: column; align-items: stretch; } .pi3twe-form label { min-width: 0; } .pi3twe-page .status-box { padding: 16px; } }

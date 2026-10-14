@@ -4,7 +4,6 @@ set -euo pipefail
 DASH_SOURCE=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 SVX_STAGE=${1:?Usage: install-pi3twe-nuc.sh SVXLINK_STAGED_INSTALL PI3TWE_PLUGIN}
 NATIVE_PLUGIN=${2:?Supply the ABI-matched Pi3tweLogic.so}
-REPO=/opt/pi3twe/pi3twe-controller
 
 test -d "$DASH_SOURCE"
 test -x "$SVX_STAGE/bin/svxlink"
@@ -84,9 +83,6 @@ EOF
 chmod 0440 /etc/sudoers.d/svxlink-dash
 visudo -cf /etc/sudoers.d/svxlink-dash
 
-systemctl daemon-reload
-systemctl enable svxlink-dash.service
-systemctl restart pi3twe-svxlink.service
-systemctl restart svxlink-dash.service
+python3 "$DASH_SOURCE/install/migrate-pi3twe-dashboard.py"
 systemctl --no-pager --full is-active pi3twe-svxlink.service svxlink-dash.service
 "/usr/local/bin/svxlink" --version
