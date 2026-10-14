@@ -126,3 +126,22 @@ migration/rollback procedure. It does not start a real test broadcast.
 The engine check also covers the SvxLink 26 event namespace: announcement filenames
 are stored in the logic's `Pi3twe` namespace, where native `setEventVariable` writes
 them. This prevents the previous news handler from reading an unset global variable.
+
+## Plain repeater identification and announcement cadence
+
+The custom event wrapper overrides the short and long local CW handlers so both
+send the configured `PI3TWE` callsign without SvxLink's automatic `/R` suffix.
+ModuleEchoLink's separate `PI3TWE-R` configuration is unaffected. The wrapper
+loads last, so a dashboard rebuild of the standard scripts retains this behavior.
+
+For this installation, the requested five-beep cadence is 600 Hz (100 Hz below
+the prior 700 Hz), 250 ms per tone and 750 ms between tones. Tone starts are one
+second apart. Apply the wrapper and persistent settings with:
+
+```sh
+sudo python3 install/update-pi3twe-ident-and-beeps.py
+```
+
+The script backs up the wrapper and audio policy, retains other policy fields,
+and restarts only SvxLink to load the event-handler change. It refuses to update
+while a test or news announcement is active. It does not start a broadcast.

@@ -20,3 +20,16 @@ proc RepeaterLogic::pi3twe_call {} {
     Logic::send_short_ident
     set ::Logic::prev_ident [clock seconds]
 }
+
+# A repeater identification uses the configured callsign without an /R suffix.
+# This overrides only the local repeater CW handlers, not ModuleEchoLink.
+namespace eval ${::logic_name}::Logic {
+    proc send_short_cw_ident {hour minute} {
+        printInfo "Playing short CW ID"
+        CW::play ${::mycall}
+    }
+    proc send_long_cw_ident {hour minute} {
+        printInfo "Playing long CW ID"
+        CW::play ${::mycall}
+    }
+}
