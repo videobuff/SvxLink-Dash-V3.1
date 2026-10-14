@@ -1,0 +1,227 @@
+#!/usr/bin/python3
+"""Own the transmit route and supervise SvxLink and its PTY relay commands."""
+
+import fcntl
+import importlib.util
+import configparser
+from contextlib import closing
+import json
+import sqlite3
+import os
+import select
+import signal
+import subprocess
+import time
+import termios
+import tty
+import uuid
+from pathlib import Path
+
+source_root = Path(__file__).resolve().parents[1]
+RELAY_ID = "QAAMZ"
+POWER, BASE, PTT, TX = 1, 2, 3, 4
+PTY_LINK = Path("/run/pi3twe-svxlink/ptt")
+STANDBY_FILE = Path("/opt/pi3twe/pi3twe-controller/database/svxlink-standby")
+LOCK_FILE = Path("/run/pi3twe-transmitter/route.lock")
+
+
+def relay(channel, enabled):
+    subprocess.run(
+        ["/usr/bin/usbrelay", f"{RELAY_ID}_{channel}={int(enabled)}"],
+        check=True, stdout=subprocess.DEVNULL, timeout=5,
+    )
+
+
+def receive():
+    try:
+        relay(PTT, False)
+    finally:
+        time.sleep(0.1)
+        try:
+            relay(TX, False)
+        finally:
+            relay(BASE, False)
+
+
+def standby_on():
+    try:
+        STANDBY_FILE.stat()
+        return True
+    except FileNotFoundError:
+        return False
+    except OSError:
+        return True
+
+
+def transmit():
+    if standby_on():
+        return False
+    relay(BASE, True)
+    time.sleep(0.25)
+    if standby_on():
+        receive()
+        return False
+    relay(TX, True)
+    relay(PTT, True)
+    return True
+
+
+def stop(signum, frame):
+    raise SystemExit(0)
+
+
+def power_on():
+    result = subprocess.run(["/usr/bin/usbrelay"], check=True, capture_output=True, text=True, timeout=5)
+    states = dict(line.strip().split("=", 1) for line in result.stdout.splitlines() if "=" in line)
+    state = states.get(f"{RELAY_ID}_{POWER}")
+    if state not in {"0", "1"}:
+        raise RuntimeError("Repeater POWER-state is unavailable")
+    return state == "1"
+
+
+def radio_command(enabled):
+    token = uuid.uuid4().hex
+    fd = os.open(PTY_LINK.parent / "command", os.O_RDWR | os.O_NOCTTY | os.O_NONBLOCK)
+    try:
+        os.write(fd, f"RADIO {token} {int(enabled)}\n".encode("ascii"))
+    finally:
+        os.close(fd)
+    return token
+
+
+def runtime_config(config_file=Path("/etc/pi3twe/svxlink/svxlink.conf"),
+                   database_file=None, power_enabled=False):
+    config = configparser.ConfigParser(interpolation=None, strict=False)
+    config.optionxform = str
+    with config_file.open(encoding="utf-8") as source:
+        config.read_file(source)
+    if config.has_section("SimplexLogic"):
+        values = dict(config.items("SimplexLogic"))
+        config.remove_section("SimplexLogic")
+        config["RepeaterLogic"] = values
+    config["GLOBAL"]["LOGICS"] = "RepeaterLogic"
+    config["GLOBAL"]["LOGIC_CORE_PATH"] = "/usr/local/lib/pi3twe-svxlink"
+    config["GLOBAL"]["MODULE_PATH"] = "/usr/local/lib/svxlink"
+    # Module paths must remain relative to the original config, not /run.
+    module_dir = Path(config["GLOBAL"].get("CFG_DIR", "svxlink.d"))
+    if not module_dir.is_absolute():
+        module_dir = config_file.parent / module_dir
+    config["GLOBAL"]["CFG_DIR"] = str(module_dir)
+    logic = config["RepeaterLogic"]
+    logic.update({"TYPE": "Pi3twe",
+                  "EVENT_HANDLER": "/usr/local/share/pi3twe-svxlink/events.tcl",
+                  "COMMAND_PTY": str(PTY_LINK.parent / "command"),
+                  "PI3TWE_SPOOL": "/opt/pi3twe/pi3twe-controller/database/svxlink-news",
+                  "PI3TWE_STATUS": str(PTY_LINK.parent / "status"),
+                  "PI3TWE_RADIO_ENABLED": str(int(power_enabled and not standby_on())),
+                  "IDENT_ONLY_AFTER_TX": "0", "NO_REPEAT": "0",
+                  "MUTE_RX_ON_TX": "0", "MUTE_TX_ON_RX": "0",
+                  "OPEN_ON_SQL": "100", "OPEN_SQL_FLANK": "OPEN", "IDLE_TIMEOUT": "1",
+                  "SHORT_VOICE_ID_ENABLE": "0", "LONG_VOICE_ID_ENABLE": "0"})
+    # SvxLink-Dash owns the radio configuration. This TX PTY is the only
+    # permitted PTT endpoint; the supervisor maps its T/R bytes to USB relays.
+    config["Tx1"]["PTT_TYPE"] = "PTY"
+    config["Tx1"]["PTT_PTY"] = str(PTY_LINK)
+    (PTY_LINK.parent / "prepared-config").write_text("dashboard")
+    config["Tx1"]["TIMEOUT"] = "1860"
+    path = PTY_LINK.parent / "svxlink.conf"
+    with path.open("w", encoding="utf-8") as output:
+        config.write(output)
+    return str(path)
+
+
+def main():
+    child = None
+    port = None
+    # Never release another owner's PTT when acquiring this lock fails.
+    with LOCK_FILE.open("r+") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        signal.signal(signal.SIGTERM, stop)
+        signal.signal(signal.SIGINT, stop)
+        try:
+            receive()
+            PTY_LINK.unlink(missing_ok=True)
+            (PTY_LINK.parent / "status").mkdir(mode=0o750, exist_ok=True)
+            (PTY_LINK.parent / "status/ready").unlink(missing_ok=True)
+            (PTY_LINK.parent / "applied-config").unlink(missing_ok=True)
+            config_path = runtime_config(power_enabled=power_on())
+            child = subprocess.Popen([
+                "/usr/local/bin/svxlink",
+                "--config=" + config_path,
+                "--logfile=/var/log/pi3twe-svxlink/svxlink.log",
+            ])
+            deadline = time.monotonic() + 15
+            while not PTY_LINK.exists():
+                if child.poll() is not None:
+                    raise RuntimeError("SvxLink stopped before creating its PTT port")
+                if time.monotonic() >= deadline:
+                    raise RuntimeError("SvxLink PTT port did not appear")
+                time.sleep(0.1)
+            port = os.open(PTY_LINK, os.O_RDWR | os.O_NOCTTY | os.O_NONBLOCK)
+            tty.setraw(port, termios.TCSANOW)
+            active_since = None
+            requested = False
+            enabled = None
+            last_radio_token = None
+            configuration_recorded = False
+            while child.poll() is None:
+                if not configuration_recorded and (PTY_LINK.parent / "status/ready").is_file():
+                    prepared = PTY_LINK.parent / "prepared-config"
+                    if prepared.is_file():
+                        (PTY_LINK.parent / "applied-config").write_text(prepared.read_text())
+                    configuration_recorded = True
+                ready, _, _ = select.select([port], [], [], 0.2)
+                if ready:
+                    commands = os.read(port, 4096)
+                    if not commands:
+                        raise RuntimeError("SvxLink PTT port disconnected")
+                    for command in commands:
+                        if command == ord("T"):
+                            requested = True
+                        elif command == ord("R"):
+                            requested = False
+                actual_power = power_on()
+                transmit_allowed = actual_power and not standby_on()
+                if transmit_allowed != enabled:
+                    if last_radio_token:
+                        (PTY_LINK.parent / "status" / f"{last_radio_token}.json").unlink(missing_ok=True)
+                    last_radio_token = radio_command(transmit_allowed)
+                    enabled = transmit_allowed
+                if not transmit_allowed:
+                    requested = False
+                if requested and transmit_allowed and active_since is None:
+                    if transmit():
+                        active_since = time.monotonic()
+                elif (not requested or not transmit_allowed) and active_since is not None:
+                    receive()
+                    active_since = None
+                if active_since is not None:
+                    limit = 180
+                    try:
+                        current = json.loads((PTY_LINK.parent / "status/current.json").read_text())
+                        if current.get("phase") in {"before_beeps", "news", "after_beeps"}:
+                            limit = 1860
+                    except (OSError, ValueError):
+                        pass
+                    if time.monotonic() - active_since > limit:
+                        raise RuntimeError("PTT transmit timeout")
+            raise RuntimeError(f"SvxLink stopped with status {child.returncode}")
+        finally:
+            # Stop the source of new commands before releasing the relays.
+            if child is not None and child.poll() is None:
+                child.terminate()
+                try:
+                    child.wait(timeout=3)
+                except subprocess.TimeoutExpired:
+                    child.kill()
+                    child.wait()
+            try:
+                receive()
+            finally:
+                if port is not None:
+                    os.close(port)
+                PTY_LINK.unlink(missing_ok=True)
+
+
+if __name__ == "__main__":
+    main()

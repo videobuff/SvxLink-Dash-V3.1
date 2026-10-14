@@ -15,7 +15,7 @@ DEVCAL_INPUT = Path("/tmp/svxlink-devcal.in")
 DEVCAL_TX_STATE = Path("/tmp/svxlink-devcal.tx")
 
 
-SVXLINK_SERVICE = "svxlink.service"
+SVXLINK_SERVICE = "pi3twe-svxlink.service"
 
 def prepare_devcal_input_pipe() -> None:
     if DEVCAL_INPUT.exists():
@@ -53,7 +53,7 @@ def get_svxlink_service_state() -> Dict[str, Any]:
 
 
 def stop_svxlink_for_calibration() -> Dict[str, Any]:
-    return run_cmd(["sudo", "/usr/bin/systemctl", "stop", SVXLINK_SERVICE], timeout=20)
+    return run_cmd(["sudo", "/usr/local/sbin/pi3twe-svxlink-control", "stop"], timeout=20)
 
 def kill_devcal_processes() -> Dict[str, Any]:
     """
@@ -100,7 +100,7 @@ def restart_svxlink_after_calibration() -> Dict[str, Any]:
         }
 
     return run_cmd(
-        ["sudo", "/usr/bin/systemctl", "restart", SVXLINK_SERVICE],
+        ["sudo", "/usr/local/sbin/pi3twe-svxlink-control", "restart"],
         timeout=30,
     )
     
@@ -116,7 +116,7 @@ def run_devcal(
     flat: bool = False,
     wide: bool = False,
 ) -> Dict[str, Any]:
-    config_file = (config_file or "/etc/svxlink/svxlink.conf").strip()
+    config_file = (config_file or "/etc/pi3twe/svxlink/svxlink.conf").strip()
     section = (section or "").strip()
     mode = (mode or "").strip()
 
@@ -174,7 +174,7 @@ def build_devcal_command(
     flat: bool = False,
     wide: bool = False,
 ) -> List[str]:
-    config_file = (config_file or "/etc/svxlink/svxlink.conf").strip()
+    config_file = (config_file or "/etc/pi3twe/svxlink/svxlink.conf").strip()
     section = (section or "").strip()
     mode = (mode or "").strip()
 

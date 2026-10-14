@@ -273,6 +273,9 @@ def render_rx_sql_block(model):
     interface_mode = interface.get("mode")
     squelch_method = squelch.get("method")
 
+    if squelch_method == "vox":
+        return "SQL_DET=VOX\nVOX_FILTER_DEPTH=20\nVOX_THRESH=1000"
+
     if interface_mode == "hidraw":
         return "SQL_DET=HIDRAW"
 
@@ -476,46 +479,13 @@ def render_rx_serial_combine_block(model):
 
 def render_tx_ptt_block(model):
     """
-    Render TX PTT block.
+    SvxLink PTT is deliberately routed through the PI3TWE USB-relay bridge.
+    The bridge owns BASE (QAAMZ_2), audio PTT (QAAMZ_3) and TX (QAAMZ_4).
+    Never let generated dashboard settings key a GPIO or radio port directly.
     """
-
-    interface = model.get("interface", {})
-    ptt_source = interface.get("ptt_source")
-
-    if ptt_source == "hidraw":
-
-        hid = model.get("hidraw", {})
-
-        device = hid.get("device", "/dev/hidraw0")
-        pin = str(hid.get("ptt_pin", "GPIO3")).lstrip("!")
-        
-        if hid.get("ptt_invert"):
-            pin = f"!{pin}"
-
-        return "\n".join([
-            "PTT_TYPE=Hidraw",
-            f"HID_DEVICE={device}",
-            f"HID_PTT_PIN={pin}",
-        ])
-
-    gpio = model.get("gpio", {}).get("ptt", {})
-
-    chip = gpio.get("chip", "gpiochip0")
-    line = gpio.get("line", 6)
-
-    if ptt_source == "serial":
-
-        serial = model.get("serial", {})
-
-        return "\n".join([
-            "PTT_TYPE=SerialPin",
-            "PTT_PORT=" + serial.get("ptt_port", "/dev/ttyS0"),
-            "PTT_PIN=" + serial.get("ptt_pin", "DTRRTS"),
-        ])
     return "\n".join([
-        "PTT_TYPE=GPIOD",
-        f"PTT_GPIOD_CHIP={chip}",
-        f"PTT_GPIOD_LINE={line}",
+        "PTT_TYPE=PTY",
+        "PTT_PTY=/run/pi3twe-svxlink/ptt",
     ])
 
 

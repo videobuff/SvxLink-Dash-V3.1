@@ -20,7 +20,7 @@ import json
 from unittest import result
 
 
-NODE_INFO_FILE = Path("/etc/svxlink/node_info.json")
+NODE_INFO_FILE = Path("/etc/pi3twe/svxlink/node_info.json")
 from models.node_model import validate_model
 
 from hw_platforms import (
@@ -359,9 +359,7 @@ def build_svxlink_configuration(
         deployed = deploy_rendered_files(rendered)
 
         result["rendered_files"] = deployed
-        motd_script = render_motd_script(model)
-        motd_path = deploy_motd_script(motd_script)
-        deployed.append(motd_path)
+        # Do not replace the host's login banner as part of a radio config build.
         result["rendered_files"] = deployed
         
         node_info_path = deploy_node_info(model)

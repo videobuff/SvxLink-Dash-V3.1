@@ -1,0 +1,16 @@
+#!/usr/bin/python3
+"""Keep an operator-selected UIT state across boot and automatic restarts."""
+from pathlib import Path
+
+
+def should_start(path):
+    try:
+        return path.read_text().strip() != 'uit'
+    except FileNotFoundError:
+        return True
+    except OSError:
+        return False
+
+
+if __name__ == '__main__':
+    raise SystemExit(0 if should_start(Path('/opt/pi3twe/pi3twe-controller/database/svxlink-standby')) else 1)

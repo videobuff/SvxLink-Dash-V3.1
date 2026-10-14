@@ -20,6 +20,7 @@ PROFILE = {
     ],
 
     "allowed_squelch_modes": [
+        "vox",
         "hidraw",
         "serial",
         "ctcss",

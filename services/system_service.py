@@ -15,12 +15,8 @@ def restart_services():
     subprocess.Popen(
         [
             "sudo",
-            "/usr/bin/systemd-run",
-            "--on-active=2",
-            "/usr/bin/systemctl",
-            "restart",
-            "svxlink",
-            "svxlink-dash",
+            "/usr/local/sbin/pi3twe-dashboard-control",
+            "restart-all",
         ]
     )
 
@@ -33,9 +29,8 @@ def reboot_device():
     subprocess.Popen(
         [
             "sudo",
-            "/usr/sbin/shutdown",
-            "-r",
-            "now",
+            "/usr/local/sbin/pi3twe-dashboard-control",
+            "reboot",
         ]
     )
 
@@ -44,12 +39,8 @@ def schedule_reboot(delay_seconds=3):
         [
             "sudo",
             "-n",
-            "/usr/bin/systemd-run",
-            f"--on-active={delay_seconds}",
-            "--unit=svxlink-dash-reboot",
-            "/usr/sbin/shutdown",
-            "-r",
-            "now",
+            "/usr/local/sbin/pi3twe-dashboard-control",
+            "reboot",
         ],
         text=True,
         capture_output=True,
@@ -63,8 +54,7 @@ def shutdown_device():
     subprocess.Popen(
         [
             "sudo",
-            "/usr/sbin/shutdown",
-            "-h",
-            "now",
+            "/usr/local/sbin/pi3twe-dashboard-control",
+            "shutdown",
         ]
     )

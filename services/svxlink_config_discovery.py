@@ -6,7 +6,7 @@ import re
 from typing import Any, Dict, List
 
 
-DEFAULT_SVXLINK_CONFIG = "/etc/svxlink/svxlink.conf"
+DEFAULT_SVXLINK_CONFIG = "/etc/pi3twe/svxlink/svxlink.conf"
 
 def read_svxlink_config(config_file: str = DEFAULT_SVXLINK_CONFIG) -> configparser.ConfigParser:
     parser = configparser.ConfigParser(
@@ -88,4 +88,4 @@ if __name__ == "__main__":
     import json
 
     print(json.dumps(discover_audio_sections(), indent=2))
-    
+

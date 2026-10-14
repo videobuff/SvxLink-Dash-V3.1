@@ -1,0 +1,33 @@
+[Unit]
+Description=PI3TWE SvxLink met bewaakte BASE/PTT-brug
+After=network-online.target sound.target pi3twe-audio-init.service pi3twe.service
+Wants=network-online.target pi3twe.service
+Requires=pi3twe-audio-init.service
+Conflicts=svxlink.service pi3twe-liquidsoap.service pi3twe-audio.service
+
+[Service]
+Type=simple
+User=erik
+Group=audio
+SupplementaryGroups=plugdev
+ExecCondition=/usr/local/sbin/pi3twe-svxlink-mode-check
+ExecStartPre=+/usr/local/sbin/pi3twe-svxlink-audio-init
+ExecStartPre=+/usr/local/sbin/pi3twe-svxlink-check
+ExecStart=/usr/local/sbin/pi3twe-svxlink-ptt
+Restart=on-failure
+RestartSec=5
+KillMode=mixed
+TimeoutStopSec=20
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+RuntimeDirectory=pi3twe-svxlink
+RuntimeDirectoryMode=0750
+LogsDirectory=pi3twe-svxlink
+LogsDirectoryMode=0750
+ReadOnlyPaths=/etc/pi3twe/svxlink
+ReadWritePaths=/run/pi3twe-transmitter /opt/pi3twe/pi3twe-controller/database/svxlink-news
+
+[Install]
+WantedBy=multi-user.target

@@ -40,6 +40,7 @@ SUPPORTED_DOWN_TONES = {
     "none",
 }
 SUPPORTED_SQUELCH_METHODS = [
+    "vox",
     "hidraw",
     "gpiod",
     "ctcss",

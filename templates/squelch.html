@@ -31,6 +31,10 @@
 
         <div class="option-group">
             <div class="radio-row">
+                <input type="radio" id="sq_vox" name="squelch_method" value="vox" {% if model.squelch.method == 'vox' %}checked{% endif %}>
+                <label for="sq_vox">VOX - detect reception from audio</label>
+            </div>
+            <div class="radio-row">
                 <input type="radio"
                         id="sq_hidraw"
                         name="squelch_method"

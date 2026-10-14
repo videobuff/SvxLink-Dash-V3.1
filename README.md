@@ -1,3 +1,11 @@
+# SvxLink-Dash PI3TWE fork
+
+PI3TWE adaptations of [f5vmr/SvxLink-Dash-V3.1](https://github.com/f5vmr/SvxLink-Dash-V3.1).
+See [PI3TWE setup and migration notes](docs/PI3TWE.md) for the working NUC configuration,
+installation prerequisites, changes and remaining controller dependencies.
+
+---
+
 # SvxLink-Dash-V3.1
 
 A modern Flask-based configuration and runtime dashboard for SvxLink systems.

@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 
 
-NODE_INFO_FILE = Path("/etc/svxlink/node_info.json")
+NODE_INFO_FILE = Path("/etc/pi3twe/svxlink/node_info.json")
 
 
 def build_node_info_json(model):

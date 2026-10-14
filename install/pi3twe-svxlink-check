@@ -1,0 +1,21 @@
+#!/bin/bash
+set -euo pipefail
+if [ "$(tr -d '[:space:]' </etc/pi3twe/pi3twe-stream-source)" != sdr ]; then
+    echo "SvxLink is geblokkeerd: de microfooningang is al de publieke streambron" >&2
+    exit 1
+fi
+mixer=$(/usr/bin/amixer -c 1 sget "Loopback Mixing")
+if ! /usr/bin/grep -Fq "Item0: 'Disabled'" <<<"$mixer"; then
+    echo "SvxLink is geblokkeerd: de analoge uitgang staat niet in zendmodus" >&2
+    exit 1
+fi
+
+/usr/bin/python3 - <<'PYTHON'
+import hashlib
+import json
+from pathlib import Path
+manifest = json.loads(Path("/usr/local/lib/pi3twe-svxlink/manifest.json").read_text())
+for filename, expected in manifest.items():
+    if hashlib.sha256(Path(filename).read_bytes()).hexdigest() != expected:
+        raise SystemExit("SvxLink is gewijzigd: bouw en test eerst de PI3TWE-logica opnieuw")
+PYTHON

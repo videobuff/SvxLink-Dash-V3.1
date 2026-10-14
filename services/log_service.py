@@ -12,8 +12,8 @@ import shlex
 
 DEFAULT_FILE = Path("/etc/default/svxlink")
 
-PREFERRED_LOG = Path("/var/log/svxlink.log")
-LEGACY_LOG = Path("/var/log/svxlink")
+PREFERRED_LOG = Path("/var/log/pi3twe-svxlink/svxlink.log")
+LEGACY_LOG = Path("/var/log/svxlink.log")
 
 
 def get_svxlink_log_path():

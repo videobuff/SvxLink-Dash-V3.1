@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+case "${1:-}" in
+  restart-all) /usr/bin/systemctl restart pi3twe-svxlink.service svxlink-dash.service ;;
+  reboot) /usr/bin/systemctl reboot ;;
+  shutdown) /usr/bin/systemctl poweroff ;;
+  *) echo "Gebruik: pi3twe-dashboard-control {restart-all|reboot|shutdown}" >&2; exit 2 ;;
+esac

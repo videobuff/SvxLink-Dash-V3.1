@@ -1,0 +1,16 @@
+#!/bin/bash
+set -euo pipefail
+
+action=${1:-}
+case "$action" in
+  start|restart)
+    /usr/bin/systemctl "$action" pi3twe-svxlink.service
+    ;;
+  stop)
+    /usr/bin/systemctl stop pi3twe-svxlink.service
+    ;;
+  *)
+    echo "Gebruik: pi3twe-svxlink-control {start|stop|restart}" >&2
+    exit 2
+    ;;
+esac

@@ -1,0 +1,5 @@
+#!/bin/bash
+set -euo pipefail
+# Break the analog feedback path before SvxLink opens the digital audio route.
+/usr/bin/amixer -c 1 sset "Loopback Mixing" Disabled >/dev/null
+/usr/bin/amixer -c 1 sset Mic mute >/dev/null

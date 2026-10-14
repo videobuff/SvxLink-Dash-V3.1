@@ -29,8 +29,8 @@ from datetime import datetime
 
 APP_ROOT = Path("/opt/dashboard")
 
-SVXLINK_CONF = Path("/etc/svxlink/svxlink.conf")
-MODULE_DIR = Path("/etc/svxlink/svxlink.d")
+SVXLINK_CONF = Path("/etc/pi3twe/svxlink/svxlink.conf")
+MODULE_DIR = Path("/etc/pi3twe/svxlink/svxlink.d")
 
 LOGIC_DIR_SRC = Path("/usr/share/svxlink/events.d")
 LOGIC_DIR_DST = Path("/usr/share/svxlink/events.d/local")
@@ -55,7 +55,7 @@ def svxlink_status():
     """
 
     result = subprocess.run(
-        ["systemctl", "is-active", "svxlink.service"],
+        ["/usr/bin/systemctl", "is-active", "pi3twe-svxlink.service"],
         text=True,
         capture_output=True,
     )
@@ -76,7 +76,7 @@ def restart_svxlink():
     """
 
     subprocess.run(
-        ["sudo", "systemctl", "restart", "svxlink.service"],
+        ["sudo", "/usr/local/sbin/pi3twe-svxlink-control", "restart"],
         check=True,
     )
 
@@ -156,21 +156,9 @@ def backup_active_config():
 # Safe write helpers
 # =========================================================
 def ensure_logic_dir():
-
-    subprocess.run(
-        ["sudo", "mkdir", "-p", str(LOGIC_DIR_DST)],
-        check=True,
-    )
-
-    subprocess.run(
-        ["sudo", "chown", "svxlink:svxlink", str(LOGIC_DIR_DST)],
-        check=True,
-    )
-
-    subprocess.run(
-        ["sudo", "chmod", "775", str(LOGIC_DIR_DST)],
-        check=True,
-    )
+    LOGIC_DIR_DST.mkdir(parents=True, exist_ok=True)
+    if not os.access(LOGIC_DIR_DST, os.W_OK):
+        raise PermissionError(f"Dashboard cannot write {LOGIC_DIR_DST}")
 def write_text_file(path, content):
     """
     Write text content to a file.

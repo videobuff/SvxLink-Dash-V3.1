@@ -7,6 +7,7 @@ Wants=network.target
 Type=simple
 User=svxlink
 Group=svxlink
+SupplementaryGroups=audio
 WorkingDirectory=/opt/dashboard
 ExecStart=/usr/bin/python3 /opt/dashboard/app.py
 Restart=on-failure

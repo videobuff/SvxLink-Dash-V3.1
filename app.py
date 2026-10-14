@@ -179,9 +179,9 @@ CTCSS_FREQUENCIES = [
 # SvxLink paths
 # =========================================================
 
-SVXLINK_CONF = Path("/etc/svxlink/svxlink.conf")
+SVXLINK_CONF = Path("/etc/pi3twe/svxlink/svxlink.conf")
 
-MODULE_DIR = Path("/etc/svxlink/svxlink.d")
+MODULE_DIR = Path("/etc/pi3twe/svxlink/svxlink.d")
 
 
 EVENT_FILES = ['Logic.tcl', 'RepeaterLogicType.tcl', 'CW.tcl']
@@ -434,7 +434,7 @@ def ensure_dirs():
 
 def svxlink_status():
     result = subprocess.run(
-        ["systemctl", "is-active", "svxlink.service"],
+        ["systemctl", "is-active", "pi3twe-svxlink.service"],
         text=True,
         capture_output=True
     )
@@ -2304,7 +2304,7 @@ def squelch_page():
         
     if request.method == "POST":
         squelch_method = request.form.get("squelch_method")
-        valid_squelch_methods = {"hidraw", "gpiod", "ctcss", "serial"}
+        valid_squelch_methods = {"hidraw", "gpiod", "ctcss", "serial", "vox"}
         
         if squelch_method not in valid_squelch_methods:
             error = "Please select a valid squelch method."
@@ -3799,7 +3799,7 @@ def log_data():
 
     return ""
 
-@app.route("/maintenance")
+@app.route("/maintenance", strict_slashes=False)
 def maintenance_page():
 
     if not session.get("authorised"):
@@ -3973,18 +3973,26 @@ def reconfigure_page():
         error=None,
         version_info=get_version_info(),
     )
-@app.route("/maintenance/restart", methods=["POST"])
+@app.route("/maintenance/restart", methods=["POST"], strict_slashes=False)
 def restart_services_page():
 
     if not session.get("authorised"):
         return redirect(url_for("authorise_page", next=request.path))
 
-    restart_services()
+    try:
+        restart_svxlink()
+    except Exception:
+        app.logger.exception("Maintenance SvxLink restart failed")
+        return render_template(
+            "message.html",
+            title="Restart Failed",
+            message="SvxLink could not be restarted. Check the service log."
+        ), 500
 
     return render_template(
         "message.html",
         title="Restart Requested",
-        message="SvxLink services are restarting."
+        message="The SvxLink restart command completed. Check its status on the dashboard."
     )
 
 @app.route("/maintenance/reboot", methods=["POST"])
@@ -4038,6 +4046,6 @@ if __name__ == "__main__":
 
     app.run(
         host="0.0.0.0",
-        port=5000,
+        port=5001,
         debug=False,
     )
