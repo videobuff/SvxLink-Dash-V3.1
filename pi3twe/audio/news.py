@@ -9,7 +9,6 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from threading import Lock
 
-from pi3twe.audio.beeps import write_beeps
 
 
 class NewsPlaybackError(RuntimeError):
@@ -96,12 +95,10 @@ class NewsPlayer:
     def _prepare(self, path, output, settings):
         with TemporaryDirectory(prefix="pi3twe-news-") as directory:
             decoded = Path(directory) / "news.wav"
-            beeps = Path(directory) / "beeps.wav"
-            write_beeps(beeps, settings, sample_rate=16000)
             subprocess.run(["/usr/bin/ffmpeg", "-nostdin", "-v", "error", "-y", "-i", str(path),
                             "-ar", "16000", "-ac", "1", "-c:a", "pcm_s16le", str(decoded)],
                            check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=120)
-            with wave.open(str(decoded)) as news, wave.open(str(beeps)) as tones, wave.open(str(output), "wb") as destination:
+            with wave.open(str(decoded)) as news, wave.open(str(output), "wb") as destination:
                 destination.setnchannels(1)
                 destination.setsampwidth(2)
                 destination.setframerate(16000)
@@ -109,11 +106,7 @@ class NewsPlayer:
                     raise NewsPlaybackError("Nieuwsbestand duurt langer dan 30 minuten")
                 if not news.getnframes():
                     raise NewsPlaybackError("Nieuwsbestand bevat geen audio")
-                intro_ms = round(tones.getnframes() * 1000 / 16000)
                 news_ms = round(news.getnframes() * 1000 / 16000)
-                signal = tones.readframes(tones.getnframes())
-                destination.writeframes(signal)
                 while chunk := news.readframes(16000):
                     destination.writeframes(chunk)
-                destination.writeframes(signal)
-            return intro_ms, news_ms
+            return 0, news_ms

@@ -204,15 +204,13 @@ def ensure_language_pack(model):
         or "en_GB"
     )
 
-    repo_url = LANGUAGE_REPOS.get(language)
-
-    if not repo_url:
-        raise RuntimeError(f"No repository configured for language {language}")
-
     target_dir = SOUND_BASE_DIR / language
-
     if target_dir.exists():
         return str(target_dir)
+
+    repo_url = LANGUAGE_REPOS.get(language)
+    if not repo_url:
+        raise RuntimeError(f"No repository configured for language {language}; install the language pack first")
 
     subprocess.run(
         [

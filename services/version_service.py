@@ -4,6 +4,7 @@
 Version helpers for SvxLink-Dash.
 """
 
+import shutil
 import subprocess
 
 
@@ -39,7 +40,11 @@ def get_svxlink_package_version():
 
         return result.stdout.strip() or "unknown"
 
-    except Exception:
+    except subprocess.CalledProcessError:
+        if shutil.which("svxlink", path="/usr/local/bin:/usr/bin:/bin"):
+            return "handmatige installatie"
+        return "unknown"
+    except OSError:
         return "unknown"
 
 
@@ -47,12 +52,13 @@ def get_svxlink_engine_version():
     try:
         result = subprocess.run(
             [
-                "/usr/bin/svxlink",
+                shutil.which("svxlink", path="/usr/local/bin:/usr/bin:/bin") or "/usr/bin/svxlink",
                 "--version",
             ],
             text=True,
             capture_output=True,
             check=True,
+            timeout=5,
         )
 
         first_line = result.stdout.strip().splitlines()[0]

@@ -12,3 +12,9 @@ config/wifi.json
 *.sqlite3
 *.sqlite3-*
 dashboard-secret
+
+.DS_Store
+config/*.bak*
+docs/.pdf-build/
+
+.venv-docs/

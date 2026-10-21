@@ -37,8 +37,11 @@
                 </label>
 
                 <div class="note">
-                    Select one airport from the available regional list.
+                    Select an airport below, or enter an ICAO code. Your configured airport is preserved.
                 </div>
+
+                <label for="custom_airport">Other airport (ICAO code, overrides selection)</label>
+                <input class="input-field" id="custom_airport" name="custom_airport" type="text" maxlength="4" pattern="[A-Za-z]{4}" placeholder="EDDG">
 
                 <div class="airport-grid">
 

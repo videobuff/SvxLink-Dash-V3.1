@@ -46,16 +46,14 @@ class NewsPlayerTest(TestCase):
         self.assertEqual(self.logic.phase, "normal")
         self.assertFalse(self.player.busy)
 
-    def test_prepare_creates_mono_pcm_with_beeps_before_and_after(self):
+    def test_prepare_creates_only_news_without_added_beeps(self):
         output = self.root / "prepared.wav"
         intro, duration = self.player._prepare(self.media, output, self.settings.read())
-        self.assertEqual((intro, duration), (1080, 100))
+        self.assertEqual((intro, duration), (0, 100))
         with wave.open(str(output)) as audio:
             self.assertEqual((audio.getnchannels(), audio.getsampwidth(), audio.getframerate()), (1, 2, 16000))
-            data = audio.readframes(audio.getnframes())
-        signal_bytes = 17280 * 2
-        self.assertEqual(data[:signal_bytes], data[-signal_bytes:])
-        self.assertEqual(data[signal_bytes:signal_bytes + 3200], bytes(3200))
+            self.assertEqual(audio.getnframes(), 1600)
+            self.assertEqual(audio.readframes(audio.getnframes()), bytes(3200))
 
     def test_engine_error_does_not_restart_engine(self):
         self.svx.command_status.return_value = {"phase": "power_off"}

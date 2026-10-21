@@ -1,5 +1,11 @@
 # PI3TWE in SvxDash
 
+Current recovery/install instructions: [Dutch manual](BOUW-EN-BEHEER-NL.md).
+The current news player adds no beeps and the hourly scheduler selects only the
+newest due bulletin, waiting for hourly identification to finish. The older
+beep sections below describe historical configuration and utility scripts.
+The experimental dedicated METAR test button is not included in this release.
+
 This fork extends [f5vmr/SvxLink-Dash-V3.1](https://github.com/f5vmr/SvxLink-Dash-V3.1)
 and retains the original Git history and attribution. The PI3TWE backend was
 migrated from the user's PI3TWE-Controller_new project into the `pi3twe` package.
@@ -73,7 +79,7 @@ and validity period but still require Power, AAN and news permission.
 
 Power off remains available during playback. TX/PTT relays are owned exclusively
 by the SvxLink supervisor, never by dashboard buttons. News playback uses the
-running native engine with beeps before and after; it does not restart SvxLink
+running native engine without added beeps; it does not restart SvxLink
 or change ALSA routing. Analogue loopback/streaming is rejected while SvxLink
 owns the microphone path. Browser audio preview never broadcasts to the radio.
 
@@ -97,7 +103,7 @@ through the local TX message mixer. It does not request an EchoLink identificati
 restart a module, or send announcement audio into the RX-to-module path.
 Power and normal SvxLink operation are required. Call testing is independent of
 the news permission. The news button broadcasts the selected uploaded bulletin
-once, including the configured beeps, without changing its schedule or validity.
+once, without added beeps, without changing its schedule or validity.
 
 The native `CALL` command shares the exclusive announcement lane with news. It
 rejects concurrent tests and disabled radio operation, supports cancellation on

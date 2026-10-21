@@ -1,0 +1,150 @@
+{
+    "schema_version": 1,
+    "build": {
+        "intent": "single_channel"
+    },
+    "platform": {
+        "id": "linux_server",
+        "name": "Generic Linux Server",
+        "supported": true
+    },
+    "node": {
+        "type": "repeater",
+        "callsign": "PI3TWE",
+        "language": "nl_NL"
+    },
+    "interface": {
+        "mode": "hidraw",
+        "sql_source": "hidraw",
+        "ptt_source": "hidraw"
+    },
+    "reflector": {
+        "enabled": false,
+        "name": null,
+        "host": null,
+        "port": null,
+        "auth_key": null
+    },
+    "ident": {
+        "short": {
+            "mode": "cw",
+            "interval": 10
+        },
+        "long": {
+            "mode": "voice",
+            "interval": 60
+        }
+    },
+    "gpio": {
+        "sql": {
+            "chip": "gpiochip0",
+            "line": 23,
+            "active": "high"
+        },
+        "ptt": {
+            "chip": "gpiochip0",
+            "line": 24
+        }
+    },
+    "hidraw": {
+        "device": "/dev/hidraw0",
+        "sql_pin": "VOL_DN",
+        "ptt_pin": "GPIO3"
+    },
+    "serial": {
+        "sql_port": "/dev/ttyS0",
+        "sql_pin": "CTS",
+        "sql_set_pins": "DTR!RTS",
+        "ptt_port": "/dev/ttyS0",
+        "ptt_pin": "DTRRTS"
+    },
+    "cw": {
+        "amp": -10,
+        "pitch": 750,
+        "cpm": 95
+    },
+    "audio": {
+        "audio_dev": "alsa:plughw:1",
+        "audio_channel": 0
+    },
+    "time_format": "24",
+    "fx_gain_normal": 0,
+    "fx_gain_low": -12,
+    "sql_hangtime": 20,
+    "sql_tail_elim": 270,
+    "tg_timeout": 60,
+    "tx_ctcss_mode": "ALWAYS",
+    "online_control": {
+        "enabled": false,
+        "command": null
+    },
+    "courtesy": {
+        "mode": "beep",
+        "frequency": 1000
+    },
+    "repeater": {
+        "idle_tone": "chime",
+        "down_tone": "biboop",
+        "idle_timeout": 10,
+        "sql_timeout": 180
+    },
+    "squelch": {
+        "method": "vox",
+        "ctcss_freq": null,
+        "ctcss_tx": false
+    },
+    "echolink": {
+        "enabled": false,
+        "callsign": "",
+        "password": "",
+        "sysopname": "",
+        "location": ""
+    },
+    "metar": {
+        "enabled": true,
+        "region": "ukwide",
+        "startdefault": "EDDG",
+        "airports": [
+            "EDLS",
+            "EHTW"
+        ]
+    },
+    "modules": {
+        "enabled": [
+            "ModuleHelp",
+            "ModuleParrot",
+            "ModuleMetarInfo"
+        ]
+    },
+    "language": {
+        "default": "nl_NL"
+    },
+    "hardware_profile_id": "generic_single",
+    "hardware": {
+        "profile_id": "generic_single",
+        "profile_name": "Generic Single Channel",
+        "type": "generic",
+        "family": null,
+        "ports": 1
+    },
+    "ports": {
+        "available": [
+            1
+        ],
+        "enabled": [
+            1
+        ]
+    },
+    "environment": {
+        "region": "british_isles"
+    },
+    "timezone": {
+        "name": "Europe/Amsterdam"
+    },
+    "node_info": {
+        "nodeLocation": "Hengelo-NL",
+        "lat": "52.116500",
+        "long": "6.662833",
+        "locator": "JO32JC"
+    }
+}

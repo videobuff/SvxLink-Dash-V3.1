@@ -28,6 +28,7 @@
         {% endif %}
 
         <form action="{{ url_for('cw_page') }}" method="post">
+            {% if reconfigure %}<input type="hidden" name="mode" value="reconfigure">{% endif %}
 
             <div class="field-group">
                 <label class="label" for="cw_amp">
@@ -67,31 +68,35 @@
 
             <div class="field-group">
                 <label class="label" for="cw_cpm">
-                    CW speed
+                    CW speed (CPM — tekens per minuut)
                 </label>
 
                 <input class="input-field"
                        id="cw_cpm"
                        name="cw_cpm"
                        type="number"
+                       aria-describedby="cw-wpm cw-speed-help"
                        min="60"
                        max="160"
                        value="{{ model.cw.cpm or 95 }}">
 
                 <div class="note">
-                    Default is 95 CPM. 130 CPM is a reasonable faster setting.
+                    <output id="cw-wpm" for="cw_cpm" aria-live="polite">{{ (model.cw.cpm or 95) / 5 }} WPM</output>
+                </div>
+                <div class="note" id="cw-speed-help">
+                    WPM = CPM ÷ 5 (PARIS). Standaard: 95 CPM = 19 WPM.
                 </div>
             </div>
 
             <div class="button-row">
                 <a class="button-secondary"
-                   href="{{ url_for('ident_page') }}">
+                   href="{{ url_for('reconfigure_page' if reconfigure else 'ident_page') }}">
                     Back
                 </a>
 
                 <button class="button-primary"
                         type="submit">
-                    Continue
+                    {{ "Save and go to Build Configuration" if reconfigure else "Continue" }}
                 </button>
             </div>
 
@@ -106,5 +111,18 @@
     SvxLink {{ version_info.engine }}
     </footer>
 </main>
+<script>
+(() => {
+    const speed = document.getElementById('cw_cpm');
+    const output = document.getElementById('cw-wpm');
+    function updateWpm() {
+        output.textContent = speed.value !== '' && Number.isFinite(speed.valueAsNumber)
+            ? `${new Intl.NumberFormat('nl-NL', {maximumFractionDigits: 1}).format(speed.valueAsNumber / 5)} WPM`
+            : '— WPM';
+    }
+    speed.addEventListener('input', updateWpm);
+    updateWpm();
+})();
+</script>
 </body>
 </html>

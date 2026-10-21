@@ -1,0 +1,13 @@
+.git
+.native-build
+__pycache__
+**/__pycache__
+.venv*
+config/node_model.json
+config/talkgroups.json
+config/wifi.json
+config/*.bak*
+backups
+*.sqlite3*
+*.log
+.DS_Store

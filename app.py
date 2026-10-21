@@ -953,9 +953,9 @@ def environment_page():
                 "region": environment,
             }
 
-            model["language"] = {
-                "default": language,
-            }
+            # Region controls network defaults; retain the selected voice.
+            selected_language = model.get("language", {}).get("default")
+            model["language"] = {"default": selected_language or language}
             model.setdefault("metar", {})
             model["metar"]["region"] = metar_region
 
@@ -2466,6 +2466,7 @@ def ident_page():
 def cw_page():
     model = load_node_model()
     error = None
+    reconfigure = request.values.get("mode") == "reconfigure"
 
     if "cw" not in model:
         model["cw"] = {
@@ -2497,12 +2498,13 @@ def cw_page():
 
                 save_node_model(model)
 
-                return redirect(url_for("courtesy_page"))
+                return redirect(url_for("build_page" if reconfigure else "courtesy_page"))
 
     return render_template(
         "cw.html",
         model=model,
         error=error,
+        reconfigure=reconfigure,
     )
     
 @app.route("/courtesy", methods=["GET", "POST"])
@@ -2724,15 +2726,18 @@ def metar_default_page():
         model["metar"]["region"] = region
         save_node_model(model)
 
-    airports = METAR_REGIONS[region]
+    airports = dict(METAR_REGIONS[region])
+    for code in [model["metar"].get("startdefault", ""), *model["metar"].get("airports", [])]:
+        if code:
+            airports.setdefault(code, "Configured airport")
 
     if request.method == "POST":
-        startdefault = request.form.get("startdefault", "").strip().upper()
+        startdefault = (request.form.get("custom_airport", "").strip() or request.form.get("startdefault", "")).strip().upper()
 
         if not startdefault:
             error = "Please select a default airport."
-        elif startdefault not in airports:
-            error = "Selected airport is not valid for this region."
+        elif len(startdefault) != 4 or not startdefault.isascii() or not startdefault.isalpha():
+            error = "Enter a four-letter ICAO airport code, for example EDDG."
         else:
             model["metar"]["startdefault"] = startdefault
             save_node_model(model)
@@ -2752,7 +2757,10 @@ def metar_airports_page():
     error = None
 
     region = model["metar"].get("region", "ukwide")
-    airports = METAR_REGIONS.get(region, {})
+    airports = dict(METAR_REGIONS.get(region, {}))
+    for code in [model["metar"].get("startdefault", ""), *model["metar"].get("airports", [])]:
+        if code:
+            airports.setdefault(code, "Configured airport")
 
     startdefault = model["metar"].get("startdefault", "")
 
@@ -3904,7 +3912,8 @@ def reconfigure_page():
                 "id": "cw",
                 "label": "CW Settings",
                 "route": "cw_page",
-                "description": "Change CW pitch, speed, and level settings.",
+                "description": "Change CW pitch, speed, and level, then go directly to Build Configuration.",
+                "route_args": {"mode": "reconfigure"},
             },
             {
                 "id": "courtesy",
@@ -3930,6 +3939,12 @@ def reconfigure_page():
         })
 
     reconfigure_targets.extend([
+        {
+            "id": "metar",
+            "label": "METAR airports (ICAO codes)",
+            "route": "metar_edit_page",
+            "description": "Edit the default and additional airports directly using ICAO codes, without the setup wizard.",
+        },
         {
             "id": "build",
             "label": "Build Configuration",

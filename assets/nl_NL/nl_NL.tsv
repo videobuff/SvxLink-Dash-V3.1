@@ -1,0 +1,773 @@
+# Nederlandse teksten voor SvxLink-geluidsclips.
+# Formaat: pad<TAB>modus<TAB>tekst
+#   modus trim  = stilte wegknippen + normaliseren (korte woorden/zinsdelen)
+#   modus max   = alleen normaliseren (lange helpteksten)
+#   modus link  = symlink; tekstkolom is het doel (relatief aan de clip)
+# Getallen 0-99 en 100-900 staan in numbers.part (gegenereerd).
+# Fonetische schrijfwijzen (bijv. "S-V-X-link") zijn bedoeld om de stem goed te laten uitspreken.
+
+### Core
+Core/activating_link_to	trim	verbinding activeren met
+Core/active_module	trim	actieve module
+Core/AM	trim	's ochtends
+Core/deactivating_link_to	trim	verbinding verbreken met
+Core/ignored	trim	genegeerd
+Core/interference	trim	storing, uitgeschakeld
+Core/link_already_active_to	trim	verbinding is al actief met
+Core/link_not_active_to	trim	verbinding is niet actief met
+Core/monitor	trim	meeluisteren
+Core/online	trim	S-V-X-link, in de lucht.
+Core/pending	trim	in afwachting
+Core/pl_is	trim	de subtoon is
+Core/please_identify	trim	identificeer u alstublieft
+Core/PM	trim	's middags
+Core/qso_recorder	trim	Q S O recorder
+Core/qsy	trim	Q S Y
+Core/reflector	trim	reflector
+Core/repeater	trim	Twentse repeater
+Core/talk_group	trim	gespreksgroep
+Core/the_time_is	trim	het is
+
+### Default: woorden
+Default/aborted	trim	afgebroken
+Default/activating	trim	activeren
+Default/already_active	trim	al actief
+Default/and	trim	en
+Default/connected	trim	verbonden
+Default/dash	trim	streepje
+Default/deactivating	trim	deactiveren
+Default/decimal	trim	komma
+Default/disconnected	trim	verbroken
+Default/help	max	geen hulp beschikbaar
+Default/hours	trim	uur
+Default/minus	trim	min
+Default/no_such_module	trim	deze module bestaat niet
+Default/not_active	trim	niet actief
+Default/ok	trim	oké
+Default/operation_failed	trim	opdracht mislukt
+Default/plus	trim	plus
+Default/press_0_for_help	max	druk nul hekje voor hulp
+Default/previous	trim	vorige
+Default/slash	trim	schuine streep
+Default/star	trim	ster
+Default/sub_commands_are	trim	de subcommando's zijn
+Default/timeout	trim	tijd verstreken
+Default/unknown_command	trim	onbekend commando
+# Eenheden (locale.tcl speelt ze uit Default)
+Default/Hz	trim	hertz
+Default/kHz	trim	kilohertz
+Default/MHz	trim	megahertz
+Default/GHz	trim	gigahertz
+# Extra woorden voor de Nederlandse tijdsaanduiding (12-uursnotatie)
+Default/over	trim	over
+Default/voor	trim	voor
+Default/half	trim	half
+Default/kwart	trim	kwart
+
+### Default: letters (Nederlandse letternamen)
+Default/a	trim	aa
+Default/b	trim	bee
+Default/c	trim	cee
+Default/d	trim	dee
+Default/e	trim	ee
+Default/f	trim	ef
+Default/g	trim	gee
+Default/h	trim	haa
+Default/i	trim	ie
+Default/j	trim	jee
+Default/k	trim	kaa
+Default/l	trim	el
+Default/m	trim	em
+Default/n	trim	en
+Default/o	trim	oo
+Default/p	trim	pee
+Default/q	trim	kuu
+Default/r	trim	er
+Default/s	trim	es
+Default/t	trim	tee
+Default/u	trim	uu
+Default/v	trim	vee
+Default/w	trim	wee
+Default/x	trim	iks
+Default/y	trim	ypsilon
+Default/z	trim	zet
+
+### Default: spellingsalfabet (internationaal NATO, zoals gebruikelijk in de amateurradio)
+Default/phonetic_a	trim	Alfa
+Default/phonetic_b	trim	Bravo
+Default/phonetic_c	trim	Charlie
+Default/phonetic_d	trim	Delta
+Default/phonetic_e	trim	Echo
+Default/phonetic_f	trim	Foxtrot
+Default/phonetic_g	trim	Golf
+Default/phonetic_h	trim	Hotel
+Default/phonetic_i	trim	India
+Default/phonetic_j	trim	Juliett
+Default/phonetic_k	trim	Kilo
+Default/phonetic_l	trim	Lima
+Default/phonetic_m	trim	Mike
+Default/phonetic_n	trim	November
+Default/phonetic_o	trim	Oscar
+Default/phonetic_p	trim	Papa
+Default/phonetic_q	trim	Quebec
+Default/phonetic_r	trim	Romeo
+Default/phonetic_s	trim	Sierra
+Default/phonetic_t	trim	Tango
+Default/phonetic_u	trim	Uniform
+Default/phonetic_v	trim	Victor
+Default/phonetic_w	trim	Whiskey
+Default/phonetic_x	trim	X-ray
+Default/phonetic_y	trim	Yankee
+Default/phonetic_z	trim	Zulu
+Default/phonetic_0	link	0
+Default/phonetic_1	link	1
+Default/phonetic_2	link	2
+Default/phonetic_3	link	3
+Default/phonetic_4	link	4
+Default/phonetic_5	link	5
+Default/phonetic_6	link	6
+Default/phonetic_7	link	7
+Default/phonetic_8	link	8
+Default/phonetic_9	link	9
+
+### DtmfRepeater
+DtmfRepeater/help	max	De D-T-M-F herhaalmodule zendt ontvangen D-T-M-F cijfers opnieuw uit. Hiermee kunt u andere stations op afstand bedienen die ook met D-T-M-F worden aangestuurd. Alle ontvangen cijfers worden doorgegeven en door S-V-X-link verder genegeerd. Verlaat de module door minstens drie seconden een hekje te zenden.
+DtmfRepeater/name	trim	D-T-M-F herhaler
+
+### EchoLink
+EchoLink/already_connected_to	trim	al verbonden met
+EchoLink/choose_station	trim	kies een station
+EchoLink/conf-echotest	trim	echotest
+EchoLink/conf-linux	trim	linux
+EchoLink/conference	trim	conferentie
+EchoLink/connected_stations	trim	verbonden stations
+EchoLink/connecting_to	trim	verbinden met
+EchoLink/directory_server_offline	max	De verbinding met de Echolink-directoryserver is verbroken. Probeer het later opnieuw.
+EchoLink/disconnect_by_callsign	trim	verbreken op roepnaam
+EchoLink/greeting	max	U bent verbonden met een S-V-X-link-station: een Echolink-toepassing voor het Linux-besturingssysteem.
+EchoLink/help	max	Met de Echolink-module maakt u verbinding met andere Echolink-stations. Om te verbinden zendt u het nodenummer, gevolgd door een hekje. Om de verbinding te verbreken zendt u een hekje. Om de module te verlaten zendt u een hekje wanneer er geen verbinding is.
+EchoLink/help_subcmd1	trim	verbonden stations opnoemen
+EchoLink/help_subcmd2	trim	lokale node-ID afspelen
+EchoLink/help_subcmd31	trim	verbinden met een willekeurige link of repeater
+EchoLink/help_subcmd32	trim	verbinden met een willekeurige conferentie
+EchoLink/help_subcmd4	trim	opnieuw verbinden met het laatst verbroken station
+EchoLink/help_subcmd50	trim	alleen luisteren uitschakelen
+EchoLink/help_subcmd51	trim	alleen luisteren inschakelen
+EchoLink/help_subcmd6*	trim	verbinden op roepnaam
+EchoLink/help_subcmd7	link	disconnect_by_callsign
+EchoLink/idx_out_of_range	trim	index buiten bereik
+EchoLink/link	trim	link
+EchoLink/link_busy	trim	link bezet
+EchoLink/listen_only	trim	alleen luisteren
+EchoLink/name	trim	Echolink
+EchoLink/no_match	trim	geen overeenkomst
+EchoLink/node_id_is	trim	de lokale node-ID is
+EchoLink/not_found	trim	niet gevonden
+EchoLink/please_try_again_later	trim	probeer het later opnieuw
+EchoLink/reject_connection	trim	de verbinding is geweigerd
+EchoLink/repeater	trim	repeater
+EchoLink/too_many_matches	trim	Te veel resultaten. Maak uw zoekopdracht specifieker.
+EchoLink/unknown	trim	onbekend
+
+### Frn
+Frn/activating	link	../Default/activating
+Frn/already_active	link	../Default/already_active
+Frn/connected_clients	trim	verbonden gebruikers
+Frn/deactivating	link	../Default/deactivating
+Frn/help	max	Met de Free Radio Network-module maakt u verbinding met Free Radio Network-servers. Verlaat de module door een hekje te zenden.
+Frn/name	trim	Free Radio Network
+Frn/not_active	link	../Default/not_active
+Frn/operation_failed	link	../Default/operation_failed
+Frn/rf_disable	trim	radio-uitzending
+Frn/unknown_command	link	../Default/unknown_command
+
+### Help
+Help/choose_module	trim	kies een module waarover u hulp wilt
+Help/help	max	Dit is een S-V-X-link-systeem: een spraaksysteem met meerdere functies voor zendamateurs. S-V-X-link wordt bediend met D-T-M-F commando's van één of meer cijfers, gevolgd door een hekje. Zendt u één enkel sterretje, dan identificeert het systeem zich. Het systeem bestaat uit verschillende modules, elk met een eigen taak. U activeert een module door het modulenummer te zenden, gevolgd door een hekje. De meeste modules spelen hun helptekst af als u een nul zendt terwijl de module actief is.
+Help/name	trim	hulp
+
+### Parrot
+Parrot/help	max	De papegaaimodule speelt alles af wat u zegt. U kunt hem gebruiken als simplex-repeater, of om te horen hoe uw modulatie klinkt. Zendt u een D-T-M-F commando naar de papegaaimodule, dan leest hij de ontvangen cijfers voor. Verlaat de module door een hekje te zenden.
+Parrot/name	trim	papegaai
+
+### PropagationMonitor
+PropagationMonitor/above	trim	boven
+PropagationMonitor/aurora_opening	trim	aurora-opening op
+PropagationMonitor/band_open_from	trim	band open van
+PropagationMonitor/between	trim	tussen
+PropagationMonitor/down_to_lat	trim	tot breedtegraad
+PropagationMonitor/f2	trim	F2
+PropagationMonitor/fai_active_on	trim	F A I actief op
+PropagationMonitor/help	max	De propagatiemonitor ontvangt propagatiemeldingen van V H F D X punt net en good D X punt net. Deze worden met gesproken berichten aangekondigd zodra ze binnenkomen. Voorbeelden zijn sporadische E, tropo- en aurora-openingen.
+PropagationMonitor/MUF	trim	hoogst bruikbare frequentie
+PropagationMonitor/multi_hop	trim	multi-hop
+PropagationMonitor/name	trim	propagatiemonitor
+PropagationMonitor/opening_on	trim	opening op
+PropagationMonitor/possible	trim	mogelijk
+PropagationMonitor/sporadic_e_opening	trim	sporadische E-opening op
+PropagationMonitor/tep	trim	trans-equatoriale propagatie
+PropagationMonitor/to	trim	tot
+PropagationMonitor/tropo_opening	trim	tropo-opening op
+PropagationMonitor/unit_cm	trim	centimeter
+PropagationMonitor/unit_deg	trim	graden
+PropagationMonitor/unit_m	trim	meter
+PropagationMonitor/unit_MHz	trim	megahertz
+
+### SelCallEnc (namen van standaarden blijven internationaal)
+SelCallEnc/AUTOA	trim	AUTO A
+SelCallEnc/CCIR1	trim	C C I R 1
+SelCallEnc/CCIR2	trim	C C I R 2
+SelCallEnc/CCITT	trim	C C I T T
+SelCallEnc/DZVEI	trim	D ZVEI
+SelCallEnc/EEA	trim	E E A
+SelCallEnc/EIA	trim	E I A
+SelCallEnc/EURO	trim	EURO
+SelCallEnc/help	max	De selcall-module zendt selectieve-oproeptoonreeksen uit. Zend een D-T-M-F commando waarvan de eerste twee cijfers de selcall-standaard aangeven, en de overige cijfers de reeks die verzonden moet worden. Beschikbare standaarden zijn: 01, ZVEI 1. 02, ZVEI 2. 03, ZVEI 3. 04, P ZVEI. 05, D ZVEI. 06, E E A. 07, C C I R 1. 08, C C I R 2. 09, V D E W. 10, C C I T T. 11, NATEL. 12, E I A. 13, EURO. 14, MODAT. 15, P D ZVEI. 16, P C C I R. 17, AUTO A.
+SelCallEnc/MODAT	trim	MODAT
+SelCallEnc/name	trim	selcall-encoder
+SelCallEnc/NATEL	trim	NATEL
+SelCallEnc/PCCIR	trim	P C C I R
+SelCallEnc/PDZVEI	trim	P D ZVEI
+SelCallEnc/PZVEI	trim	P ZVEI
+SelCallEnc/QC2	trim	Q C 2
+SelCallEnc/VDEW	trim	V D E W
+SelCallEnc/ZVEI1	trim	ZVEI 1
+SelCallEnc/ZVEI2	trim	ZVEI 2
+SelCallEnc/ZVEI3	trim	ZVEI 3
+
+### TclVoiceMail
+TclVoiceMail/help	max	Met de voicemailmodule stuurt u gesproken berichten naar andere zendamateurs. Vraag eerst bij de beheerder een persoonlijke gebruikers-ID en wachtwoord aan. Menu's leiden u door het afspelen en opnemen van berichten. Breek een handeling af door een hekje te zenden.
+TclVoiceMail/logged_in_menu1	trim	volgend nieuw bericht
+TclVoiceMail/logged_in_menu2	trim	bericht opnemen
+TclVoiceMail/login	trim	voer gebruikers-ID en wachtwoord in
+TclVoiceMail/login_ok	trim	ingelogd
+TclVoiceMail/message_deleted	trim	bericht verwijderd
+TclVoiceMail/messages_for	trim	berichten voor
+TclVoiceMail/name	trim	voicemail
+TclVoiceMail/new_messages	trim	nieuwe berichten
+TclVoiceMail/pnm_menu1	trim	verwijderen
+TclVoiceMail/pnm_menu2	trim	beantwoorden en verwijderen
+TclVoiceMail/pnm_menu3	trim	opnieuw afspelen
+TclVoiceMail/rec_done	trim	uw bericht is opgeslagen
+TclVoiceMail/rec_enter_rcpt	trim	voer de ontvanger in
+TclVoiceMail/rec_message	trim	spreek uw bericht in
+TclVoiceMail/rec_sending_to	trim	voicemail opnemen voor
+TclVoiceMail/rec_subject	trim	spreek een kort onderwerp in
+TclVoiceMail/unknown_userid	trim	onbekende gebruikers-ID
+TclVoiceMail/wrong_userid_or_password	trim	verkeerde gebruikers-ID of wachtwoord
+
+### Trx
+Trx/name	trim	transceiverbesturing
+
+### Default: getallen (gegenereerd)
+Default/0	trim	nul
+Default/1	trim	één
+Default/2	trim	twee
+Default/3	trim	drie
+Default/4	trim	vier
+Default/5	trim	vijf
+Default/6	trim	zes
+Default/7	trim	zeven
+Default/8	trim	acht
+Default/9	trim	negen
+Default/10	trim	tien
+Default/11	trim	elf
+Default/12	trim	twaalf
+Default/13	trim	dertien
+Default/14	trim	veertien
+Default/15	trim	vijftien
+Default/16	trim	zestien
+Default/17	trim	zeventien
+Default/18	trim	achttien
+Default/19	trim	negentien
+Default/20	trim	twintig
+Default/21	trim	eenentwintig
+Default/22	trim	tweeëntwintig
+Default/23	trim	drieëntwintig
+Default/24	trim	vierentwintig
+Default/25	trim	vijfentwintig
+Default/26	trim	zesentwintig
+Default/27	trim	zevenentwintig
+Default/28	trim	achtentwintig
+Default/29	trim	negenentwintig
+Default/30	trim	dertig
+Default/31	trim	eenendertig
+Default/32	trim	tweeëndertig
+Default/33	trim	drieëndertig
+Default/34	trim	vierendertig
+Default/35	trim	vijfendertig
+Default/36	trim	zesendertig
+Default/37	trim	zevenendertig
+Default/38	trim	achtendertig
+Default/39	trim	negenendertig
+Default/40	trim	veertig
+Default/41	trim	eenenveertig
+Default/42	trim	tweeënveertig
+Default/43	trim	drieënveertig
+Default/44	trim	vierenveertig
+Default/45	trim	vijfenveertig
+Default/46	trim	zesenveertig
+Default/47	trim	zevenenveertig
+Default/48	trim	achtenveertig
+Default/49	trim	negenenveertig
+Default/50	trim	vijftig
+Default/51	trim	eenenvijftig
+Default/52	trim	tweeënvijftig
+Default/53	trim	drieënvijftig
+Default/54	trim	vierenvijftig
+Default/55	trim	vijfenvijftig
+Default/56	trim	zesenvijftig
+Default/57	trim	zevenenvijftig
+Default/58	trim	achtenvijftig
+Default/59	trim	negenenvijftig
+Default/60	trim	zestig
+Default/61	trim	eenenzestig
+Default/62	trim	tweeënzestig
+Default/63	trim	drieënzestig
+Default/64	trim	vierenzestig
+Default/65	trim	vijfenzestig
+Default/66	trim	zesenzestig
+Default/67	trim	zevenenzestig
+Default/68	trim	achtenzestig
+Default/69	trim	negenenzestig
+Default/70	trim	zeventig
+Default/71	trim	eenenzeventig
+Default/72	trim	tweeënzeventig
+Default/73	trim	drieënzeventig
+Default/74	trim	vierenzeventig
+Default/75	trim	vijfenzeventig
+Default/76	trim	zesenzeventig
+Default/77	trim	zevenenzeventig
+Default/78	trim	achtenzeventig
+Default/79	trim	negenenzeventig
+Default/80	trim	tachtig
+Default/81	trim	eenentachtig
+Default/82	trim	tweeëntachtig
+Default/83	trim	drieëntachtig
+Default/84	trim	vierentachtig
+Default/85	trim	vijfentachtig
+Default/86	trim	zesentachtig
+Default/87	trim	zevenentachtig
+Default/88	trim	achtentachtig
+Default/89	trim	negenentachtig
+Default/90	trim	negentig
+Default/91	trim	eenennegentig
+Default/92	trim	tweeënnegentig
+Default/93	trim	drieënnegentig
+Default/94	trim	vierennegentig
+Default/95	trim	vijfennegentig
+Default/96	trim	zesennegentig
+Default/97	trim	zevenennegentig
+Default/98	trim	achtennegentig
+Default/99	trim	negenennegentig
+Default/100	trim	honderd
+Default/200	trim	tweehonderd
+Default/300	trim	driehonderd
+Default/400	trim	vierhonderd
+Default/500	trim	vijfhonderd
+Default/600	trim	zeshonderd
+Default/700	trim	zevenhonderd
+Default/800	trim	achthonderd
+Default/900	trim	negenhonderd
+
+# Compatibiliteit: het Engelse locale gebruikt 2X..9X; in het Nederlands niet nodig
+Default/2X	link	20
+Default/3X	link	30
+Default/4X	link	40
+Default/5X	link	50
+Default/6X	link	60
+Default/7X	link	70
+Default/8X	link	80
+Default/9X	link	90
+
+### MetarInfo (luchtvaartweerberichten)
+MetarInfo/help	max	Met de metar-module vraagt u actuele luchtvaartweerberichten op van I-C-A-O weerstations over de hele wereld, geleverd door de Amerikaanse weerdienst N-O-A-A. Voor een lijst van vooraf ingestelde stations zendt u nul één, gevolgd door een hekje. Vraag de beheerder om stations toe te voegen die u interesseren. Verlaat de module door één hekje te zenden.
+MetarInfo/name	trim	metar-informatie
+MetarInfo/metarinformation	link	name
+MetarInfo/icao_available	trim	de volgende I-C-A-O stations zijn beschikbaar
+MetarInfo/metar_not_valid	trim	voor deze luchthaven zijn geen actuele metargegevens beschikbaar
+MetarInfo/metreport_time	trim	tijdstip van de waarneming
+MetarInfo/maintenance_needed	trim	onderhoud van het systeem nodig
+MetarInfo/airport	trim	luchthaven
+MetarInfo/defined	trim	gedefinieerd
+MetarInfo/such	trim	zo'n
+MetarInfo/no	trim	geen
+MetarInfo/not	trim	niet
+MetarInfo/reported	trim	gemeld
+MetarInfo/valid	trim	geldig
+MetarInfo/specific_reports_taken	trim	speciale waarnemingen gedaan
+MetarInfo/figures_unreliable	trim	waarden onbetrouwbaar
+MetarInfo/operational	trim	in bedrijf
+MetarInfo/out	trim	buiten bedrijf
+MetarInfo/closed	trim	gesloten
+# Luchthavens: eigen stations
+MetarInfo/EDDG	trim	Münster Osnabrück
+MetarInfo/EDLS	trim	Stadtlohn Vreden
+MetarInfo/EHTW	trim	Twente Airport
+# Luchthavens: overige
+MetarInfo/EBAW	trim	Antwerpen
+MetarInfo/EBBR	trim	Brussel
+MetarInfo/EDDB	trim	Berlijn Brandenburg
+MetarInfo/EDDC	trim	Dresden
+MetarInfo/EDDE	trim	Erfurt
+MetarInfo/EDDF	trim	Frankfurt
+MetarInfo/EDDH	trim	Hamburg
+MetarInfo/EDDK	trim	Keulen Bonn
+MetarInfo/EDDL	trim	Düsseldorf
+MetarInfo/EDDM	trim	München
+MetarInfo/EDDP	trim	Leipzig Halle
+MetarInfo/EDDS	trim	Stuttgart
+MetarInfo/EDDT	trim	Berlijn Tegel
+MetarInfo/EDDV	trim	Hannover
+MetarInfo/EDDW	trim	Bremen
+MetarInfo/EDJA	trim	Memmingen
+MetarInfo/EGLL	trim	Londen Heathrow
+MetarInfo/EHAM	trim	Schiphol
+MetarInfo/EHBK	trim	Maastricht Aken
+MetarInfo/EHDL	trim	Deelen
+MetarInfo/EHEH	trim	Eindhoven
+MetarInfo/EHGG	trim	Groningen Eelde
+MetarInfo/EHKD	trim	Den Helder De Kooy
+MetarInfo/EHLE	trim	Lelystad
+MetarInfo/EHLW	trim	Leeuwarden
+MetarInfo/EHRD	trim	Rotterdam
+MetarInfo/EHVK	trim	Volkel
+MetarInfo/EHVL	trim	Vlieland
+MetarInfo/EHWO	trim	Woensdrecht
+MetarInfo/EKCH	trim	Kopenhagen Kastrup
+MetarInfo/ESSA	trim	Stockholm Arlanda
+MetarInfo/ESSB	trim	Stockholm Bromma
+MetarInfo/KDEN	trim	Denver
+MetarInfo/KJAC	trim	Jackson Hole
+MetarInfo/KJFK	trim	New York, John F. Kennedy
+MetarInfo/KORD	trim	Chicago O'Hare
+MetarInfo/KSDB	trim	Sandberg, Californië
+MetarInfo/KTOL	trim	Toledo Express
+MetarInfo/LEMD	trim	Madrid
+MetarInfo/LEPA	trim	Palma de Mallorca
+MetarInfo/LIRA	trim	Rome Ciampino
+MetarInfo/LIRF	trim	Rome Fiumicino
+MetarInfo/LIRU	trim	Rome Urbe
+MetarInfo/LPPT	trim	Lissabon
+MetarInfo/LSGG	trim	Genève
+MetarInfo/LSZH	trim	Zürich
+MetarInfo/LTAI	trim	Antalya
+MetarInfo/SKBO	trim	Bogota, Colombia
+MetarInfo/SKSM	trim	Santa Marta, Colombia
+MetarInfo/ZBAA	trim	Beijing
+MetarInfo/ZMUB	trim	Ulaanbaatar
+# Stationstypen
+MetarInfo/automatic_station	trim	automatisch station
+MetarInfo/auto	link	automatic_station
+MetarInfo/ao1	trim	A-O-1 station
+MetarInfo/ao1_long	trim	station zonder neerslagdiscriminator
+MetarInfo/ao2	trim	A-O-2 station
+MetarInfo/ao2_long	trim	station met neerslagdiscriminator
+MetarInfo/sawrs	trim	S-A-W-R-S
+MetarInfo/sawrs_long	trim	aanvullend luchtvaartmeldstation
+MetarInfo/speci	trim	S-P-E-C-I
+MetarInfo/speci_long	trim	speciaal luchtvaartweerbericht
+MetarInfo/taf	trim	T-A-F
+MetarInfo/taf_long	trim	luchthavenverwachting
+MetarInfo/fir	trim	F-I-R
+MetarInfo/fir_long	trim	vluchtinformatiegebied
+# Wind
+MetarInfo/wind	trim	wind
+MetarInfo/calm	trim	windstil
+MetarInfo/variable	trim	veranderlijk
+MetarInfo/gusts_up	trim	vlagen tot
+MetarInfo/varies_from	trim	varieert van
+MetarInfo/varies	trim	varieert
+MetarInfo/pk_wnd	trim	piekwind
+MetarInfo/wshft	trim	windsprong
+MetarInfo/wspd	trim	windsnelheid
+MetarInfo/ws	trim	windschering
+MetarInfo/direction	trim	richting
+MetarInfo/dir	link	direction
+MetarInfo/dir_north	trim	noord
+MetarInfo/dir_ne	trim	noordoost
+MetarInfo/dir_east	trim	oost
+MetarInfo/dir_se	trim	zuidoost
+MetarInfo/dir_s	trim	zuid
+MetarInfo/dir_sw	trim	zuidwest
+MetarInfo/dir_w	trim	west
+MetarInfo/dir_nw	trim	noordwest
+MetarInfo/ndv	trim	geen richtingsvariatie
+# Zicht en wolken
+MetarInfo/visibility	trim	zicht
+MetarInfo/rvr	trim	baanzicht
+MetarInfo/rvrno	trim	baanzichtgegevens niet beschikbaar
+MetarInfo/cavok	trim	cavok
+MetarInfo/cavok_long	trim	wolkenbasis en zicht goed
+MetarInfo/ceiling	trim	wolkenbasis
+MetarInfo/vv	link	ceiling
+MetarInfo/ca	trim	wolkenhoogte
+MetarInfo/cc	trim	afstand tussen de wolken
+MetarInfo/binovc	trim	openingen in het wolkendek
+MetarInfo/cld	trim	lenticulaire of rotorwolken
+MetarInfo/clouds	link	cld
+MetarInfo/few	trim	licht bewolkt
+MetarInfo/sct	trim	half bewolkt
+MetarInfo/bkn	trim	zwaar bewolkt
+MetarInfo/ovc	trim	geheel bewolkt
+MetarInfo/skc	trim	onbewolkt
+MetarInfo/clr	trim	helder
+MetarInfo/clear	link	clr
+MetarInfo/nsc	trim	geen significante bewolking
+MetarInfo/cbmam	trim	cumulonimbus mammatus
+MetarInfo/cld_ac	trim	altocumulus
+MetarInfo/cld_acc	trim	altocumulus castellanus
+MetarInfo/cld_as	trim	altostratus
+MetarInfo/cld_cb	trim	C-B
+MetarInfo/cld_cb_long	trim	cumulonimbus
+MetarInfo/cld_cc	trim	cirrocumulus
+MetarInfo/cld_cf	trim	cumulus fractus
+MetarInfo/cld_ci	trim	cirrus
+MetarInfo/cld_cs	trim	cirrostratus
+MetarInfo/cld_cu	trim	cumulus
+MetarInfo/cld_ns	trim	nimbostratus
+MetarInfo/cld_sc	trim	stratocumulus
+MetarInfo/cld_sf	trim	stratus fractus
+MetarInfo/cld_st	trim	stratus
+MetarInfo/tcu	trim	T-C-U
+MetarInfo/tcu_long	trim	torenvormige cumulus
+MetarInfo/obsc	trim	verduisterd
+MetarInfo/ohd	trim	boven het station
+# Weer
+MetarInfo/wx	trim	weer
+MetarInfo/nsw	trim	geen significant weer
+MetarInfo/nwc	trim	geen significante weersverandering
+MetarInfo/ra	trim	regen
+MetarInfo/dz	trim	motregen
+MetarInfo/sn	trim	sneeuw
+MetarInfo/sg	trim	motsneeuw
+MetarInfo/gr	trim	hagel
+MetarInfo/gs	trim	kleine hagel
+MetarInfo/pe	trim	ijsregen
+MetarInfo/pl	link	pe
+MetarInfo/ic	trim	ijskristallen
+MetarInfo/up	trim	onbekende neerslag
+MetarInfo/br	trim	nevel
+MetarInfo/fg	trim	mist
+MetarInfo/mi	trim	ondiepe
+MetarInfo/bc	trim	banken
+MetarInfo/hz	trim	heiigheid
+MetarInfo/fu	trim	rook
+MetarInfo/va	trim	vulkanische as
+MetarInfo/du	trim	stof
+MetarInfo/sa	trim	zand
+MetarInfo/py	trim	stuifwater
+MetarInfo/po	trim	stof- of zandhozen
+MetarInfo/sq	trim	windstoten
+MetarInfo/fc	trim	trechterwolk
+MetarInfo/ss	trim	zandstorm
+MetarInfo/ds	trim	stofstorm
+MetarInfo/ts	trim	onweer
+MetarInfo/tsno	trim	onweerssensor niet beschikbaar
+MetarInfo/sh	trim	buien
+MetarInfo/fz	trim	onderkoelde
+MetarInfo/dr	trim	laag opwaaiende
+MetarInfo/bl	trim	opwaaiende
+MetarInfo/blw	link	bl
+MetarInfo/tornado	trim	tornado
+MetarInfo/waterspout	trim	waterhoos
+MetarInfo/virga	trim	virga
+MetarInfo/ltg	trim	bliksem
+MetarInfo/ltg_ca	trim	wolk naar lucht
+MetarInfo/ltg_cc	trim	wolk naar wolk
+MetarInfo/ltg_cg	trim	wolk naar grond
+MetarInfo/ltg_ic	trim	in de wolk
+MetarInfo/widespread_dust	trim	wijdverspreid stof
+MetarInfo/turb	trim	turbulentie
+MetarInfo/precipitation	trim	neerslag
+MetarInfo/pcpn	link	precipitation
+MetarInfo/fzrano	trim	gegevens onderkoelde regen niet beschikbaar
+MetarInfo/pno	trim	regenmetergegevens niet beschikbaar
+MetarInfo/pwino	trim	actuele weergegevens niet beschikbaar
+MetarInfo/re	link	recent
+MetarInfo/recent	trim	recent
+# Intensiteit en ligging
+MetarInfo/light	trim	lichte
+MetarInfo/moderate	trim	matige
+MetarInfo/mod	link	moderate
+MetarInfo/heavy	trim	zware
+MetarInfo/sev	trim	zware
+MetarInfo/vc	trim	in de omgeving van het station
+MetarInfo/vicinity	trim	in de omgeving van het station
+MetarInfo/dsnt	trim	op afstand
+MetarInfo/ap	trim	op de luchthaven
+MetarInfo/alqds	trim	in alle kwadranten
+MetarInfo/cot	trim	aan de kust
+MetarInfo/lan	trim	boven land
+MetarInfo/mar	trim	boven zee
+MetarInfo/mtns	trim	boven de bergen
+MetarInfo/ocnl	trim	af en toe
+MetarInfo/frequent	trim	vaak
+MetarInfo/frq	link	frequent
+MetarInfo/cons	trim	aanhoudend
+MetarInfo/mov	trim	in beweging
+MetarInfo/stnr	trim	stationair
+MetarInfo/obs	trim	waargenomen
+MetarInfo/abv	trim	boven
+MetarInfo/agl	trim	boven de grond
+MetarInfo/sfc	trim	aan het oppervlak
+MetarInfo/center	trim	midden
+MetarInfo/left	trim	links
+MetarInfo/right	trim	rechts
+MetarInfo/sector	trim	sector
+# Temperatuur en druk
+MetarInfo/temperature	trim	temperatuur
+MetarInfo/dewpoint	trim	dauwpunt
+MetarInfo/daytime	trim	overdag
+MetarInfo/daytime_temperature	trim	dagtemperatuur
+MetarInfo/pressure	trim	luchtdruk
+MetarInfo/pres	link	pressure
+MetarInfo/qnh	trim	Q-N-H
+MetarInfo/qfe	trim	Q-F-E
+MetarInfo/qfe_long	trim	luchtdruk op veldhoogte
+MetarInfo/slp	trim	luchtdruk op zeeniveau
+MetarInfo/altimeter	trim	hoogtemeter
+MetarInfo/presfr	trim	luchtdruk daalt snel
+MetarInfo/presrr	trim	luchtdruk stijgt snel
+MetarInfo/flightlevel	trim	vliegniveau
+# Trend
+MetarInfo/trend	trim	trend
+MetarInfo/tendency	trim	tendens
+MetarInfo/ndt	trim	geen duidelijke tendens
+MetarInfo/nosig	trim	nosig
+MetarInfo/nosig_long	trim	geen significante verandering
+MetarInfo/nospeci	trim	geen speciale berichten uitgegeven
+MetarInfo/becmg	trim	wordend
+MetarInfo/becmg_long	link	becmg
+MetarInfo/tempo	trim	tijdelijk
+MetarInfo/prob	trim	kans op
+MetarInfo/predicted	trim	verwacht
+MetarInfo/incr	trim	toenemend
+MetarInfo/increasing	link	incr
+MetarInfo/decr	trim	afnemend
+MetarInfo/decreasing	link	decr
+MetarInfo/wkn	trim	verzwakkend
+MetarInfo/rapidly	trim	snel
+MetarInfo/more_rapidly	trim	sneller
+MetarInfo/slowly	trim	langzaam
+MetarInfo/steadily	trim	gestaag
+MetarInfo/unsteadily	trim	ongelijkmatig
+MetarInfo/steady	trim	stabiel
+# Banen en baancondities
+MetarInfo/rwy	trim	baan
+MetarInfo/runway	link	rwy
+MetarInfo/runways	trim	banen
+MetarInfo/rwys	link	runways
+MetarInfo/clear_and_dry	trim	vrij en droog
+MetarInfo/clrd	link	clear_and_dry
+MetarInfo/dry	trim	droog
+MetarInfo/damp	trim	vochtig
+MetarInfo/wet	trim	nat
+MetarInfo/wet_or_water_patches	trim	nat of plassen water
+MetarInfo/rime_or_frost_covered	trim	bedekt met rijp of ijzel
+MetarInfo/slush	trim	natte sneeuw
+MetarInfo/frozen_ruts_or_ridges	trim	bevroren sporen of richels
+MetarInfo/contamination	trim	bedekking
+MetarInfo/deposit	trim	afzetting
+MetarInfo/deposit_depth	trim	dikte van de afzetting
+MetarInfo/breaking_action	trim	remwerking
+MetarInfo/friction_coefficient	trim	wrijvingscoëfficiënt
+MetarInfo/good	trim	goed
+MetarInfo/medium_good	trim	middelmatig tot goed
+MetarInfo/medium	trim	middelmatig
+MetarInfo/medium_poor	trim	middelmatig tot slecht
+MetarInfo/poor	trim	slecht
+# Opmerkingen en tijd
+MetarInfo/remark	trim	opmerking
+MetarInfo/remarks	trim	opmerkingen
+MetarInfo/rmk	link	remark
+MetarInfo/acft	trim	vliegtuig
+MetarInfo/mshp	trim	ongeval
+MetarInfo/twr	trim	verkeerstoren
+MetarInfo/tower	link	twr
+MetarInfo/na	trim	niet van toepassing
+MetarInfo/began	trim	begonnen
+MetarInfo/began_at	trim	begonnen om
+MetarInfo/ended	trim	geëindigd
+MetarInfo/ended_at	trim	geëindigd om
+MetarInfo/utc	trim	U-T-C
+MetarInfo/hour	trim	uur
+MetarInfo/hours	trim	uur
+MetarInfo/first	trim	eerste
+MetarInfo/last	trim	laatste
+MetarInfo/next	trim	volgende
+MetarInfo/then	trim	daarna
+MetarInfo/until	trim	tot
+MetarInfo/from	trim	van
+MetarInfo/to	trim	tot
+MetarInfo/at	trim	met
+MetarInfo/btn	trim	tussen
+MetarInfo/due_to	trim	vanwege
+MetarInfo/or	trim	of
+MetarInfo/all	trim	alle
+MetarInfo/more	trim	meer
+MetarInfo/more_than	trim	meer dan
+MetarInfo/more_than_10	trim	meer dan tien
+MetarInfo/less_than	trim	minder dan
+MetarInfo/less_or_equal	trim	minder dan of gelijk aan
+MetarInfo/maximum	trim	maximum
+MetarInfo/mnm	link	minimum
+MetarInfo/minimum	trim	minimum
+MetarInfo/minimal	trim	minimaal
+MetarInfo/minus	trim	min
+MetarInfo/decimal	trim	komma
+MetarInfo/percent	trim	procent
+MetarInfo/thousand	trim	duizend
+MetarInfo/eighth	trim	achtste
+# Eenheden
+MetarInfo/unit_cm	trim	centimeter
+MetarInfo/unit_cms	trim	centimeter
+MetarInfo/unit_degree	trim	graad
+MetarInfo/unit_degrees	trim	graden
+MetarInfo/unit_feet	trim	voet
+MetarInfo/unit_foot	trim	voet
+MetarInfo/unit_hPa	trim	hectopascal
+MetarInfo/unit_inch	trim	inch
+MetarInfo/unit_inches	trim	inch
+MetarInfo/unit_km	trim	kilometer
+MetarInfo/unit_kms	trim	kilometer
+MetarInfo/unit_kph	trim	kilometer per uur
+MetarInfo/unit_kts	trim	knopen
+MetarInfo/unit_mb	trim	millibar
+MetarInfo/unit_mbs	trim	millibar
+MetarInfo/unit_meter	trim	meter
+MetarInfo/unit_meters	trim	meter
+MetarInfo/unit_mile	trim	mijl
+MetarInfo/unit_miles	trim	mijl
+MetarInfo/unit_mm	trim	millimeter
+MetarInfo/unit_mms	trim	millimeter
+MetarInfo/unit_mph	trim	mijl per uur
+MetarInfo/unit_mps	trim	meter per seconde
+
+### Default: duizend (voor getallen van vier cijfers, zie locale.tcl)
+Default/1000	trim	duizend
+
+### AprsWx (PI3TWE: APRS-weer PA3DZX-13, zie events.d/local/RepeaterLogic.tcl)
+AprsWx/intro	trim	het weer in Twente
+AprsWx/geen_gegevens	max	er zijn op dit moment geen actuele weergegevens beschikbaar
+AprsWx/temperatuur	trim	temperatuur
+AprsWx/graden	trim	graden
+AprsWx/luchtvochtigheid	trim	luchtvochtigheid
+AprsWx/procent	trim	procent
+AprsWx/luchtdruk	trim	luchtdruk
+AprsWx/millibar	trim	millibar
+AprsWx/wind	trim	wind
+AprsWx/windstil	trim	windstil
+AprsWx/meter_per_seconde	trim	meter per seconde
+AprsWx/windstoten	trim	windstoten
+AprsWx/regen	trim	regen afgelopen uur
+AprsWx/millimeter	trim	millimeter
+AprsWx/gemeten_om	trim	gemeten om
+AprsWx/dir_n	trim	noord
+AprsWx/dir_no	trim	noordoost
+AprsWx/dir_o	trim	oost
+AprsWx/dir_zo	trim	zuidoost
+AprsWx/dir_z	trim	zuid
+AprsWx/dir_zw	trim	zuidwest
+AprsWx/dir_w	trim	west
+AprsWx/dir_nw	trim	noordwest

@@ -1,0 +1,8 @@
+FROM debian:13-slim
+COPY . /src
+WORKDIR /src
+RUN printf '#!/bin/sh\nexit 101\n' > /usr/sbin/policy-rc.d \
+    && chmod +x /usr/sbin/policy-rc.d \
+    && bash install/install-clean-debian13.sh /var/tmp/pi3twe-build \
+    && python3 scripts/check-clean-install.py \
+    && python3 scripts/check-native-tests.py

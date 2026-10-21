@@ -26,7 +26,7 @@ if 'pi3tweLiveAudio' not in header:
 (include / 'Logic.h').write_text(header)
 (include / 'RepeaterLogic.h').write_text((logic / 'RepeaterLogic.h').read_text())
 paths = [include, args.build_config, args.build_config / "include", source / "misc", args.headers / 'usr/include/sigc++-3.0',
-         args.headers / 'usr/lib/x86_64-linux-gnu/sigc++-3.0/include']
+         args.headers / ('usr/lib/' + subprocess.check_output(['gcc', '-dumpmachine'], text=True).strip() + '/sigc++-3.0/include')]
 paths += [source / relative for relative in ['svxlink/svxlink','svxlink/trx','async/core','async/audio','locationinfo','echolib','svxlink/svxmisc']]
 flags = (args.build_config / 'svxlink/svxlink/CMakeFiles/svxlink.dir/flags.make').read_text()
 if '-DINTERNAL_SAMPLE_RATE=16000' not in flags:
