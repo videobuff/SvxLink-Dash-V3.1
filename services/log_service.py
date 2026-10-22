@@ -3,7 +3,7 @@
 """
 SvxLink log path resolver.
 
-Determines the active SvxLink log file from /etc/default/svxlink.
+Prefers the PI3TWE controller log, then the standard SvxLink configuration.
 """
 
 from pathlib import Path
@@ -20,13 +20,12 @@ def get_svxlink_log_path():
     """
     Determine active SvxLink log path.
 
-    Preferred source:
-    - LOGFILE from /etc/default/svxlink
-
-    Fallback:
-    - /var/log/svxlink.log
-    - /var/log/svxlink
+    Prefer the existing PI3TWE controller log. Otherwise use LOGFILE from
+    /etc/default/svxlink, falling back to /var/log/svxlink.log.
     """
+
+    if PREFERRED_LOG.exists():
+        return PREFERRED_LOG
 
     if DEFAULT_FILE.exists():
 
@@ -51,8 +50,5 @@ def get_svxlink_log_path():
 
         except Exception:
             pass
-
-    if PREFERRED_LOG.exists():
-        return PREFERRED_LOG
 
     return LEGACY_LOG
