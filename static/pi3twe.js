@@ -35,8 +35,6 @@ async function refresh() {
         document.getElementById('audio-info').textContent = state.audio.error || `Audio-uitgang: ${state.audio.output_mode === 'transmit' ? 'zendmodus' : 'analoge monitor'}`;
         document.getElementById('rf-info').textContent = state.rf.error || `${state.rf.receiver_label} · ${state.rf.frequency_label} · squelch ${state.rf.squelch_unit || ''}`;
         document.getElementById('system-state').textContent = `Host ${state.radio.hostname} · uptime ${Math.floor(state.radio.uptime_s / 3600)} uur`;
-        const events = document.getElementById('event-list'); events.replaceChildren();
-        for (const event of state.events) { const li = document.createElement('li'); li.textContent = `${event.created_at} — ${event.message}`; events.append(li); }
         if (!formsLoaded) {
             fill(document.getElementById('logic-form'), state.logic.settings);
             fill(document.getElementById('audio-form'), state.audio);
