@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" class="light-theme">
+<html lang="nl" class="light-theme">
 <head>
     <meta charset="UTF-8">
-    <title>SvxLink Log</title>
+    <title>PI3TWE Log</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='site.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='svxlink.ico') }}">
 </head>
@@ -13,15 +13,19 @@
 <section class="card dashboard-container">
 
     <div class="dashboard-header">
-        <h1>SvxLink Log</h1>
-        <p>Recent diagnostic log output</p>
+        <h1>PI3TWE Log</h1>
+        <p>SvxLink, dashboard en bediening · automatisch vernieuwd iedere 5 seconden</p>
     </div>
 
     {% include "navbar.html" %}
 
-    <pre id="tail">{% for line in log_lines %}
-        {{ line }}
-        {% endfor %}</pre>
+    <h2>SvxLink</h2>
+    <p>Laatste 250 regels; nieuwste meldingen onderaan.</p>
+    <pre id="tail">{{ log_lines | join('\n') }}</pre>
+
+    <h2>Dashboard en bediening</h2>
+    <p>Laatste 100 gebeurtenissen; nieuwste meldingen onderaan. Tijden zijn Nederlands.</p>
+    <pre id="event-tail">Gebeurtenissen laden…</pre>
 
 <footer class="site-footer">
     SvxLink Software &copy; Tobias Blömberg SM0SVX<br>
@@ -64,7 +68,20 @@ async function refreshLog() {
     }
 }
 
-setInterval(refreshLog, 5000);
+async function refreshEvents() {
+    const target = document.getElementById("event-tail");
+    const wasNearBottom = target.scrollHeight - target.scrollTop - target.clientHeight < 40;
+    try {
+        const response = await fetch("{{ url_for('event_log_data') }}");
+        if (!response.ok) throw new Error("Gebeurtenissen konden niet worden geladen. Ververs de pagina of log opnieuw in.");
+        target.textContent = (await response.text()) || "Nog geen gebeurtenissen.";
+        if (wasNearBottom) target.scrollTop = target.scrollHeight;
+    } catch (error) {
+        target.textContent = error.message;
+    }
+}
+refreshEvents();
+setInterval(() => { refreshLog(); refreshEvents(); }, 5000);
 
 </script>
 </body>

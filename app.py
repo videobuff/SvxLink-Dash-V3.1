@@ -3784,6 +3784,24 @@ def log_page():
         "log.html",
         log_lines=log_lines,
     )
+@app.route("/event-log-data", methods=["GET"])
+def event_log_data():
+    if not session.get("authorised"):
+        return "", 401
+    runtime = app.extensions.get("pi3twe")
+    if runtime is None:
+        return "PI3TWE-gebeurtenissen zijn niet beschikbaar.", 200, {"Content-Type": "text/plain; charset=utf-8"}
+    try:
+        events = runtime.events.recent(100)
+        lines = [
+            f"{event['created_at']} [{event['category']}] {event['message']}"
+            for event in reversed(events)
+        ]
+        return "\n".join(lines), 200, {"Content-Type": "text/plain; charset=utf-8"}
+    except Exception:
+        app.logger.exception("PI3TWE-gebeurtenissen lezen mislukt")
+        return "Gebeurtenissen konden niet worden geladen.", 503
+
 @app.route("/log-data", methods=["GET"])
 def log_data():
 
