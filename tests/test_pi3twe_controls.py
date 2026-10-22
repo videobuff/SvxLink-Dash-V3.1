@@ -140,8 +140,11 @@ class ControlsTest(TestCase):
         response = self.request('audio', method='PUT', json={'enabled': True})
         self.assertEqual(response.status_code, 400)
         self.rt.mixer.update.assert_not_called()
-        response = self.request('stream', method='PUT', json={'stream_source': 'analog'})
-        self.assertEqual(response.status_code, 400)
+
+    def test_retired_stream_controls_are_unavailable(self):
+        for path in ['stream', 'rf']:
+            response = self.request(path, method='PUT', json={})
+            self.assertEqual(response.status_code, 404)
 
     def test_only_one_scheduler_process_may_start(self):
         self.rt.start()

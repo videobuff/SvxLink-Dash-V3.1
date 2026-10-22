@@ -1,0 +1,18 @@
+[Unit]
+Description=PI3TWE ontvanger-audio naar MediaMTX via VPN
+Wants=network-online.target
+Requires=wg-quick@wg-pi3twe.service
+After=network-online.target sound.target wg-quick@wg-pi3twe.service pi3twe-svxlink.service
+StartLimitIntervalSec=0
+[Service]
+User=svxlink
+Group=audio
+ExecStart=/usr/bin/ffmpeg -nostdin -hide_banner -loglevel warning -thread_queue_size 512 -f alsa -ar 48000 -ac 2 -i pi3twe_rx -vn -af "pan=mono|c0=c0" -c:a libopus -application lowdelay -frame_duration 20 -ar 48000 -ac 1 -b:a 32k -f rtsp -rtsp_transport tcp -rw_timeout 15000000 rtsp://10.203.72.1:8555/pi3twe-nuc
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+[Install]
+WantedBy=multi-user.target

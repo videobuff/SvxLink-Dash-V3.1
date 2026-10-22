@@ -33,14 +33,10 @@ async function refresh() {
         document.getElementById('engine-state').textContent = `Service: ${state.mode.engine.service_state} · Audio-engine: ${state.mode.engine.native_ready ? 'gereed' : 'niet gereed'}`;
         document.getElementById('current-news').textContent = state.current_news ? `Uitzending: ${state.current_news} (${state.logic.phase})` : 'Geen nieuwsuitzending actief.';
         document.getElementById('audio-info').textContent = state.audio.error || `Audio-uitgang: ${state.audio.output_mode === 'transmit' ? 'zendmodus' : 'analoge monitor'}`;
-        document.getElementById('rf-info').textContent = state.rf.error || `${state.rf.receiver_label} · ${state.rf.frequency_label} · squelch ${state.rf.squelch_unit || ''}`;
         document.getElementById('system-state').textContent = `Host ${state.radio.hostname} · uptime ${Math.floor(state.radio.uptime_s / 3600)} uur`;
         if (!formsLoaded) {
             fill(document.getElementById('logic-form'), state.logic.settings);
             fill(document.getElementById('audio-form'), state.audio);
-            fill(document.getElementById('stream-form'), state.stream);
-            fill(document.getElementById('rf-form'), {...state.rf, offset_khz: state.rf.frequency_offset_hz / 1000});
-            const sql = document.querySelector('#rf-form [name="squelch_level"]'); sql.min = state.rf.squelch_level_min; sql.max = state.rf.squelch_level_max;
             formsLoaded = true;
         }
         const radioReady = power && state.mode.mode === 'aan' && state.mode.engine.native_ready;
@@ -93,12 +89,11 @@ async function loadNews() {
 }
 const upload = document.getElementById('news-upload');
 upload.addEventListener('submit', async event => { event.preventDefault(); if (await action(upload.querySelector('button'), 'news', 'POST', new FormData(upload), 'Bulletin ingelezen. Activeer het voor de uurplanning.', true)) upload.audio.value = ''; });
-for (const name of ['logic', 'audio', 'stream', 'rf']) {
+for (const name of ['logic', 'audio']) {
     const form = document.getElementById(`${name}-form`);
     form.addEventListener('submit', event => {
         event.preventDefault(); const data = {};
         for (const input of form.querySelectorAll('[name]')) data[input.name] = input.type === 'checkbox' ? input.checked : input.type === 'number' ? Number(input.value) : input.value;
-        if (name === 'rf') { data.frequency_hz = Number(data.base_frequency_hz) + data.offset_khz * 1000; delete data.base_frequency_hz; delete data.offset_khz; }
         action(form.querySelector('button'), name, 'PUT', data, 'Instellingen opgeslagen');
     });
 }

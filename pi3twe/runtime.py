@@ -10,8 +10,6 @@ from .audio.mixer import AudioMixer
 from .audio.news import NewsPlayer
 from .controller import Controller
 from .controller.audio_logic import AudioLogic, LogicSettings
-from .controller.rf_monitor import RfMonitor
-from .controller.stream_source import StreamSource
 from .controller.svxlink import SvxLink
 from .controller.svxlink_mode import SvxLinkMode
 from .database import EventStore, NewsStore, RelayStateStore
@@ -46,8 +44,6 @@ class Runtime:
         self.player = NewsPlayer(transmit_enabled=self.settings.read()['news_enabled'],
                                  svxlink=self.engine, logic=self.logic,
                                  spool_directory=self.directory / 'svxlink-news')
-        self.stream = StreamSource()
-        self.rf = RfMonitor(restart_command=('sudo', '-n', '/usr/local/sbin/pi3twe-dashboard-control', 'restart-rf'))
         self._play_lock = Lock()
         self._edit_lock = Lock()
         self._pending = None
@@ -198,7 +194,7 @@ class Runtime:
                   'logic': self.logic.state(), 'news_busy': self.busy,
                   'current_news': self._pending or self.player.current_label,
                   'events': self.events.recent(20)}
-        for name, source in [('audio', self.mixer), ('stream', self.stream), ('rf', self.rf)]:
+        for name, source in [('audio', self.mixer)]:
             try:
                 output[name] = source.state()
             except (RuntimeError, OSError) as error:

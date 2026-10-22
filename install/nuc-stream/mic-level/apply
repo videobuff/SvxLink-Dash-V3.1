@@ -1,0 +1,5 @@
+#!/bin/sh
+set -eu
+/usr/bin/amixer -q -c Generic sset 'Input Source',0 Mic
+/usr/bin/amixer -q -c Generic sset 'Mic Boost',0 3
+/usr/bin/amixer -q -c Generic sset Capture,0 30dB cap

@@ -3,7 +3,7 @@ Description=PI3TWE SvxLink met bewaakte BASE/PTT-brug
 After=network-online.target sound.target pi3twe-audio-init.service
 Wants=network-online.target
 Requires=pi3twe-audio-init.service
-Conflicts=svxlink.service pi3twe-liquidsoap.service pi3twe-audio.service
+Conflicts=svxlink.service
 
 [Service]
 Type=simple

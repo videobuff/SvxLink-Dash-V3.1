@@ -83,21 +83,6 @@
             <label class="pi3twe-check"><input type="checkbox" name="enabled"> Analoge loopback (alleen als SvxLink UIT staat)</label>
             <button type="submit">Audio opslaan</button>
         </form>
-        <form id="stream-form" class="pi3twe-form">
-            <label>Publieke streambron <select name="stream_source"><option value="sdr">OpenWebRX / SDR</option><option value="analog">Analoge microfooningang</option></select></label>
-            <button type="submit">Streambron opslaan</button>
-        </form>
-    </details>
-    <details class="status-box status-box-soft">
-        <summary>SDR / RF-monitor</summary>
-        <p id="rf-info" class="pi3twe-muted"></p>
-        <form id="rf-form" class="pi3twe-form">
-            <label>Frequentie <select name="base_frequency_hz"><option value="145600000">145,600 MHz — uitgang</option><option value="145000000">145,000 MHz — ingang</option><option value="430275000">430,275 MHz — test</option></select></label>
-            <label>Fijnafstemming (kHz) <input type="number" name="offset_khz" min="-10" max="10" step="1" required></label>
-            <label id="rf-squelch-label">Squelch <input type="number" name="squelch_level" required></label>
-            <label>Streamniveau (%) <input type="number" name="stream_level_percent" min="10" max="100" step="5" required></label>
-            <button type="submit">RF-monitor opslaan</button>
-        </form>
     </details>
     <section class="status-box status-box-soft">
         <h2>Systeemstatus</h2>

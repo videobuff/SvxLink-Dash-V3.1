@@ -1,9 +1,5 @@
 #!/bin/bash
 set -euo pipefail
-if [ "$(tr -d '[:space:]' </etc/pi3twe/pi3twe-stream-source)" != sdr ]; then
-    echo "SvxLink is geblokkeerd: de microfooningang is al de publieke streambron" >&2
-    exit 1
-fi
 mixer=$(/usr/bin/amixer -c 1 sget "Loopback Mixing")
 if ! /usr/bin/grep -Fq "Item0: 'Disabled'" <<<"$mixer"; then
     echo "SvxLink is geblokkeerd: de analoge uitgang staat niet in zendmodus" >&2

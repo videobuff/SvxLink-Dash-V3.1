@@ -195,27 +195,6 @@ def audio():
     return jsonify(ok=True, **result)
 
 
-@bp.put('/api/stream')
-def stream():
-    rt = runtime()
-    source = (request.get_json(silent=True) or {}).get('stream_source')
-    with rt.logic.change():
-        if source == 'analog' and rt.engine.state()['active']:
-            raise ValueError('De microfooningang wordt door SvxLink gebruikt')
-        result = rt.stream.update(source)
-    rt.events.add('beheer', 'STREAMBRON ' + source.upper())
-    return jsonify(ok=True, **result)
-
-
-@bp.put('/api/rf')
-def rf():
-    data = request.get_json(silent=True) or {}
-    rt = runtime()
-    result = rt.rf.update(data.get('frequency_hz'), data.get('squelch_level'), data.get('stream_level_percent'))
-    rt.events.add('beheer', 'RF-MONITOR ' + result['frequency_label'])
-    return jsonify(ok=True, **result)
-
-
 def register(app):
     app.register_blueprint(bp)
     @app.get('/metrics')
