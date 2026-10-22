@@ -20,11 +20,11 @@
     {% include "navbar.html" %}
 
     <h2>SvxLink</h2>
-    <p>Laatste 250 regels; nieuwste meldingen onderaan.</p>
-    <pre id="tail">{{ log_lines | join('\n') }}</pre>
+    <p>Laatste 250 regels; nieuwste meldingen bovenaan.</p>
+    <pre id="tail">{{ log_lines | reverse | join('\n') }}</pre>
 
     <h2>Dashboard en bediening</h2>
-    <p>Laatste 100 gebeurtenissen; nieuwste meldingen onderaan. Tijden zijn Nederlands.</p>
+    <p>Laatste 100 gebeurtenissen; nieuwste meldingen bovenaan. Tijden zijn Nederlands.</p>
     <pre id="event-tail">Gebeurtenissen laden…</pre>
 
 <footer class="site-footer">
@@ -44,8 +44,7 @@ async function refreshLog() {
 
     const tail = document.getElementById("tail");
 
-    const wasNearBottom =
-        tail.scrollHeight - tail.scrollTop - tail.clientHeight < 40;
+    const wasNearTop = tail.scrollTop < 40;
 
     try {
 
@@ -57,10 +56,10 @@ async function refreshLog() {
 
         const text = await response.text();
 
-        tail.textContent = text;
+        tail.textContent = text.split("\n").reverse().join("\n");
 
-        if (wasNearBottom) {
-            tail.scrollTop = tail.scrollHeight;
+        if (wasNearTop) {
+            tail.scrollTop = 0;
         }
 
     } catch (err) {
@@ -70,12 +69,12 @@ async function refreshLog() {
 
 async function refreshEvents() {
     const target = document.getElementById("event-tail");
-    const wasNearBottom = target.scrollHeight - target.scrollTop - target.clientHeight < 40;
+    const wasNearTop = target.scrollTop < 40;
     try {
         const response = await fetch("{{ url_for('event_log_data') }}");
         if (!response.ok) throw new Error("Gebeurtenissen konden niet worden geladen. Ververs de pagina of log opnieuw in.");
-        target.textContent = (await response.text()) || "Nog geen gebeurtenissen.";
-        if (wasNearBottom) target.scrollTop = target.scrollHeight;
+        target.textContent = (await response.text()).split("\n").reverse().join("\n") || "Nog geen gebeurtenissen.";
+        if (wasNearTop) target.scrollTop = 0;
     } catch (error) {
         target.textContent = error.message;
     }
