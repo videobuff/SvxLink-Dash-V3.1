@@ -1285,7 +1285,8 @@ footer a:hover {
 .manual-dtmf-help p {
     margin: 0.5rem 0;
 }
-#tail {
+#tail,
+#event-tail {
     margin-top: 1rem;
     padding: 1rem;
     background: #101010;
